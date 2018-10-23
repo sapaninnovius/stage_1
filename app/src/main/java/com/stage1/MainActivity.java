@@ -62,17 +62,22 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                        FragmentTransaction fragmentTransaction;
                 switch (menuItem.getItemId()) {
                     case R.id.mnu_contact:
                         return true;
                     case R.id.mnu_gallery:
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container,new GalaryFragment(),"gallery");
+                        fragmentTransaction.addToBackStack("gallery");
+                        fragmentTransaction.commit();
                         return true;
                     case R.id.mnu_home:
                         getSupportFragmentManager().getBackStackEntryAt(0);
                         return true;
                     case R.id.mnu_message:
-                        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                      fragmentTransaction.replace(R.id.main_container,new InboxFragment(),"inbox");
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container,new InboxFragment(),"inbox");
                       fragmentTransaction.addToBackStack("inbox");
                       fragmentTransaction.commit();
                         return true;

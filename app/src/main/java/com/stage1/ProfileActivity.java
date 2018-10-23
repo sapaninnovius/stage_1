@@ -39,6 +39,11 @@ public class ProfileActivity extends AppCompatActivity {
                 fab_cancel.setVisibility(View.INVISIBLE);
             }
         });
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_back_arrow);
         /*toolbar = findViewById(R.id.my_toolbar);
         toolbar.setBackgroundColor(getResources().getColor(R.color.transparent));
         setSupportActionBar(toolbar);
@@ -55,4 +60,16 @@ public class ProfileActivity extends AppCompatActivity {
         menu_edit.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return super.onCreateOptionsMenu(menu);
     }*/
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return false;
+        }
+    }
 }
