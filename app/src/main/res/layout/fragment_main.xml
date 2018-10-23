@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent"
+    tools:context=".HomeFragment">
+    <LinearLayout
+        android:visibility="gone"
+        android:id="@+id/ll_filter"
+        android:background="@android:color/black"
+        android:gravity="center"
+        android:weightSum="100"
+        android:elevation="@dimen/_5sdp"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_40sdp">
+        <CheckBox
+            android:checked="true"
+            android:textSize="@dimen/_12ssp"
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_weight="25"
+            android:text="Bartender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:checked="true"
+            android:textSize="@dimen/_12ssp"
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_weight="25"
+            android:text="Waitress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:checked="true"
+            android:textSize="@dimen/_12ssp"
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_weight="25"
+            android:text="Stripper"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <CheckBox
+            android:checked="true"
+            android:textSize="@dimen/_12ssp"
+            android:buttonTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:layout_weight="25"
+            android:text="Bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rec__search_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+</FrameLayout>

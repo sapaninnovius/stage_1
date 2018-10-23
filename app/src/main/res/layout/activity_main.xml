@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <android.support.v7.widget.Toolbar
+            style="@style/SearchStyle"
+            android:id="@+id/my_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_35sdp"
+            android:background="@color/colorPrimary" />
+        <!--<EditText
+            android:id="@+id/et_search"
+            android:visibility="invisible"
+            android:layout_marginLeft="@dimen/_25sdp"
+            app:layout_constraintLeft_toLeftOf="@id/my_toolbar"
+            android:backgroundTint="@android:color/white"
+            android:textColor="@android:color/white"
+            android:text="hello world"
+            android:textSize="@dimen/_14ssp"
+            app:layout_constraintRight_toLeftOf="@id/img_search"
+            app:layout_constraintBottom_toBottomOf="@id/my_toolbar"
+            app:layout_constraintTop_toTopOf="@id/my_toolbar"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_40sdp" />
+        <ImageView
+            android:id="@+id/img_search"
+            android:tint="@android:color/white"
+            android:background="@drawable/ics_search"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:layout_constraintRight_toRightOf="@id/my_toolbar"
+            app:layout_constraintBottom_toBottomOf="@id/my_toolbar"
+            app:layout_constraintTop_toTopOf="@id/my_toolbar"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp" />
+        <ImageView
+            android:visibility="invisible"
+            android:id="@+id/img_search_cancel"
+            android:tint="@android:color/white"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"
+            android:layout_marginRight="@dimen/_5sdp"
+            app:layout_constraintRight_toRightOf="@id/my_toolbar"
+            app:layout_constraintBottom_toBottomOf="@id/my_toolbar"
+            app:layout_constraintTop_toTopOf="@id/my_toolbar"
+            android:layout_width="@dimen/_25sdp"
+            android:layout_height="@dimen/_25sdp" />-->
+        <FrameLayout
+            android:id="@+id/main_container"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/_35sdp"
+            android:layout_marginBottom="@dimen/_40sdp"
+            android:background="@color/colorAccent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_menu"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_40sdp"
+            android:background="@color/colorPrimary"
+            app:itemIconTint="@color/bottom_menu"
+            app:itemTextColor="@color/bottom_menu"
+            app:labelVisibilityMode="labeled"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:menu="@menu/menu_bottom_bar" />
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/colorAccent"
+        android:fitsSystemWindows="true"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@color/colorPrimary"
+        app:itemTextColor="@color/colorPrimary"
+        app:itemTextAppearance="@style/menu_text_style"
+        app:menu="@menu/menu_navigationview" >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:clickable="true"
+            android:orientation="vertical">
+        <TextView
+            android:id="@+id/footer_item_1"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="Footer Item 1" />
+        <TextView
+            android:id="@+id/footer_item_2"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="Footer Item 2" />
+        </LinearLayout>
+    </android.support.design.widget.NavigationView>
+    <!--app:headerLayout="@layout/nav_header" -->
+</android.support.v4.widget.DrawerLayout>

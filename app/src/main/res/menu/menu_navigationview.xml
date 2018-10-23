@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/mnu_home" android:icon="@drawable/ic_action_home" android:title="Home" app:showAsAction="ifRoom">Home</item>
+    <item android:id="@+id/mnu_contact" android:icon="@drawable/ic_action_contact" android:title="Contact" app:showAsAction="ifRoom">Contact</item>
+    <item android:id="@+id/mnu_message" android:icon="@drawable/ic_action_message" android:title="Message" app:showAsAction="ifRoom">Message</item>
+    <item android:id="@+id/mnu_gallery" android:icon="@drawable/ic_action_galary" android:title="Gallery" app:showAsAction="ifRoom">Gallery</item>
+    <item android:id="@+id/mnu_changePassword" android:icon="@drawable/ic_password" android:title="Change Password" app:showAsAction="ifRoom"></item>
+    <item android:id="@+id/mnu_logout" android:icon="@drawable/ic_action_logout" android:title="Logout" app:showAsAction="ifRoom"></item>
+
+</menu>
