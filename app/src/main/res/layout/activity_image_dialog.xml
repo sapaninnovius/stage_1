@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/img_dialog_constraint"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+    <ImageButton
+        android:visibility="gone"
+        android:padding="@dimen/_5sdp"
+        android:background="@color/transparent"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_notification_clear_all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <View
+        android:id="@+id/opacityFilter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/black"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.7">
+    </View>
+    <ImageView
+        app:layout_constraintTop_toTopOf="parent"
+        android:src="@mipmap/a6"
+        android:id="@+id/img_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</RelativeLayout>
+    <!--
+    <?xml version="1.0" encoding="utf-8"?>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/img_dialog_constraint"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:backgroundTint="@color/colorAccent"
+        android:background="@color/transparent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+    >
+      <ImageView
+          app:layout_constraintTop_toTopOf="parent"
+          android:src="@mipmap/a6"
+          android:id="@+id/img_dialog"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent" />
+
+
+    </android.support.constraint.ConstraintLayout>-->

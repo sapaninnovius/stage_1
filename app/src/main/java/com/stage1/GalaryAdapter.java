@@ -1,5 +1,10 @@
 package com.stage1;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,14 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHolder> {
 
     private final List<Integer> img_list;
+    OnItemClickListener onItemClickListener;
 
-    public GalaryAdapter(List<Integer> img_list) {
+    public GalaryAdapter(List<Integer> img_list, OnItemClickListener onItemClickListener) {
         this.img_list=img_list;
+        this.onItemClickListener =onItemClickListener;
     }
 
     @NonNull
@@ -34,11 +42,25 @@ public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHold
         return 10;
     }
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_gallery;
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             img_gallery=itemView.findViewById(R.id.img_gallery);
         }
+
+        @Override
+        public void onClick(View v) {
+            /*Bitmap bitmap = BitmapFactory.decodeResource(v.getResources(), img_list.get(getLayoutPosition()));
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+            byte[] b = baos.toByteArray();*/
+            onItemClickListener.onItemClick(getLayoutPosition(),v);
+//            int image = img_list.get(getLayoutPosition());
+        }
+    }
+    public interface OnItemClickListener {
+        void onItemClick(int item,View v);
     }
 }

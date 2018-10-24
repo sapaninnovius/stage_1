@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.ParcelUuid;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -22,6 +23,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,27 +32,44 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.support.v7.widget.SearchView;
 import android.widget.Toast;
 
 import java.lang.reflect.Field;
 
-public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
+import de.hdodenhof.circleimageview.CircleImageView;
+
+public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener, Animation.AnimationListener, View.OnClickListener {
 
     private DrawerLayout mDrawerLayout;
     HomeFragment homeFragment;
    /* ImageView img_search,img_search_clear;
     EditText et_search;*/
     Toolbar toolbar;
+    private Animation animSideDown, animSideUp;
+
     String title;
     private FragmentCommunicator fragmentCommunicator;
+    private View notification_layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = findViewById(R.id.my_toolbar);
+        animSideDown = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_down);
+        animSideUp = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.slide_up);
+        animSideDown.setAnimationListener(this);
+        animSideUp.setAnimationListener(this);
+        notification_layout =findViewById(R.id.layout_notification);
+        CircleImageView img_yes = notification_layout.findViewById(R.id.img_yes);
+        CircleImageView img_no = notification_layout.findViewById(R.id.img_no);
+        img_yes.setOnClickListener(this);
+        img_no.setOnClickListener(this);
         /*img_search_clear = findViewById(R.id.img_search_cancel);
         img_search = findViewById(R.id.img_search);
         et_search = findViewById(R.id.et_search);
@@ -65,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         FragmentTransaction fragmentTransaction;
                 switch (menuItem.getItemId()) {
                     case R.id.mnu_contact:
+                        notification_layout.setVisibility(View.VISIBLE);
+                        notification_layout.startAnimation(animSideDown);
                         return true;
                     case R.id.mnu_gallery:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -73,7 +94,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         fragmentTransaction.commit();
                         return true;
                     case R.id.mnu_home:
-                        getSupportFragmentManager().getBackStackEntryAt(0);
+                        fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container,new HomeFragment(),"home");
+                        fragmentTransaction.addToBackStack("home");
+                        fragmentTransaction.commit();
                         return true;
                     case R.id.mnu_message:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -101,16 +125,21 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         menuItem.setChecked(true);
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
-                        if (menuItem.getItemId() == R.id.mnu_changePassword) {
-                            showMyDialog();
-                        }
-                        if (menuItem.getItemId() ==R.id.mnu_logout)
+
+                        switch (menuItem.getItemId())
                         {
-                            showauthactivity();
+                            case R.id.mnu_changePassword:
+                                showMyDialog();
+                                break;
+                            case R.id.mnu_logout:
+                                showauthactivity();
+                                break;
+                            case R.id.mnu_notification:
+                                changeToNotification();
+                                break;
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
-
                         return true;
                     }
                 });
@@ -126,8 +155,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         homeFragment = new HomeFragment();
         FragmentTransaction fragmentTransaction;
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_container, homeFragment);
+        fragmentTransaction.add(R.id.main_container,homeFragment);
         fragmentTransaction.commit();
+    }
+
+    private void changeToNotification() {
+        startActivity(new Intent(this,NotificationActivity.class));
     }
 
     private void showauthactivity() {
@@ -164,8 +197,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnCloseListener(this);
-        ImageView closeButton = (ImageView)searchView.findViewById(/*R.id.search_close_btn*/searchView.getContext().getResources()
-                .getIdentifier("android:id/search_close_btn", null, null));
+        /*ImageView closeButton = (ImageView)searchView.findViewById(*//*R.id.search_close_btn*//*searchView.getContext().getResources()
+                .getIdentifier("android:id/search_close_btn", null, null));*/
         /*closeButton.setOnClickListener(this);*/
         MenuItemCompat.setOnActionExpandListener( menu.findItem(R.id.search), new MenuItemCompat.OnActionExpandListener() {
             @Override
@@ -173,14 +206,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 flag=false;
                 searchView.setIconified(false);
                 boolean i = searchView.isIconified();
-               fragmentCommunicator.passData(true);
+//               fragmentCommunicator.passData(true);
                 return true;
             }
 
             @Override
             public boolean onMenuItemActionCollapse(MenuItem menuItem) {
                 searchView.setIconified(true);
-                fragmentCommunicator.passData(false);
+//                fragmentCommunicator.passData(false);
                 return true;
             }
         });
@@ -203,7 +236,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 /*searchView.setOnQueryTextListener(this);
                 searchView.performClick();
                 searchView.requestFocus();*/
-//                searchView.setOnQueryTextListener(this);
+                searchView.setOnQueryTextListener(this);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -211,16 +244,26 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        fragmentCommunicator.searchQuery(query);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        if (newText.length()==0)
+        {
+            fragmentCommunicator.passData(false);
+        }else
+        {
+            fragmentCommunicator.passData(true);
+        }
+        fragmentCommunicator.searchQuery(newText);
         return false;
     }
     boolean flag= false;
     @Override
     public boolean onClose() {
+        fragmentCommunicator.passData(false);
             if (!searchView.isIconified()&&!flag)
             {
                 flag=true;
@@ -241,6 +284,28 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onAnimationStart(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationEnd(Animation animation) {
+
+    }
+
+    @Override
+    public void onAnimationRepeat(Animation animation) {
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        notification_layout.setVisibility(View.GONE);
+        notification_layout.startAnimation(animSideUp);
+    }
+
     /* @Override
     public void onClick(View v) {
         switch (v.getId())
@@ -263,5 +328,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     public interface FragmentCommunicator {
 
         public void passData(boolean name);
+
+        public void searchQuery(String searchquery);
     }
 }

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/transparent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:alpha="0.7"
+        android:background="@android:color/black"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_70sdp"/>
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:padding="@dimen/_5sdp"
+        android:id="@+id/img_user_notification"
+        android:src="@mipmap/user_placeholder"
+        android:layout_width="@dimen/_70sdp"
+        android:layout_height="@dimen/_70sdp" />
+    <TextView
+        android:textColor="@android:color/white"
+        app:layout_constraintTop_toTopOf="@id/img_user_notification"
+        app:layout_constraintBottom_toTopOf="@id/txt_user_message_notification"
+        app:layout_constraintRight_toLeftOf="@id/ll_choice_notification"
+        app:layout_constraintLeft_toRightOf="@id/img_user_notification"
+        android:id="@+id/txt_user_name_notification"
+        android:textSize="@dimen/_16ssp"
+        android:text="Martin"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/txt_user_message_notification"
+        app:layout_constraintBottom_toBottomOf="@id/img_user_notification"
+        app:layout_constraintTop_toBottomOf="@id/txt_user_name_notification"
+        app:layout_constraintRight_toLeftOf="@id/ll_choice_notification"
+        app:layout_constraintLeft_toRightOf="@id/img_user_notification"
+        android:text="This user is requested to work in your bar as a bartender. Is this bartender work in your Bar?"
+        android:lines="3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/ll_choice_notification"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toRightOf="@id/txt_user_name_notification"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/img_user_notification"
+        app:layout_constraintTop_toTopOf="@id/img_user_notification"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp">
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_no"
+            android:padding="@dimen/_5sdp"
+            android:src="@mipmap/no"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/img_yes"
+            android:padding="@dimen/_5sdp"
+            android:src="@mipmap/yes"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

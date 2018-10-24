@@ -16,6 +16,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +41,8 @@ public class HomeFragment extends Fragment implements Animation.AnimationListene
     private RecyclerView.LayoutManager mLayoutManager;
     SearchAdapter searchAdapter;
     private LinearLayout ll_filter;
-    private Animation animSideDown,animSideUp;
+    private Animation animSideDown, animSideUp;
+    private List<String> barList;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -75,6 +79,7 @@ public class HomeFragment extends Fragment implements Animation.AnimationListene
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.barList = createDumyData();
         // Inflate the layout for this fragment
         DividerItemDecoration itemDecorator = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         itemDecorator.setDrawable(ContextCompat.getDrawable(getContext(), R.drawable.divider));
@@ -82,7 +87,7 @@ public class HomeFragment extends Fragment implements Animation.AnimationListene
         search_list = view.findViewById(R.id.rec__search_list);
         mLayoutManager = new LinearLayoutManager(getActivity().getApplicationContext());
         search_list.setLayoutManager(mLayoutManager);
-        searchAdapter = new SearchAdapter();
+        searchAdapter = new SearchAdapter(this.barList);
         search_list.setAdapter(searchAdapter);
         search_list.addItemDecoration(itemDecorator);
         ll_filter = view.findViewById(R.id.ll_filter);
@@ -98,7 +103,7 @@ public class HomeFragment extends Fragment implements Animation.AnimationListene
         ((MainActivity) getActivity()).passVal(new MainActivity.FragmentCommunicator() {
             @Override
             public void passData(boolean name) {
-                if (name) {
+                if (name&&ll_filter.getVisibility()==View.INVISIBLE) {
                     ll_filter.setVisibility(View.VISIBLE);
                     ll_filter.startAnimation(animSideDown);
                 } else if (!name) {
@@ -106,8 +111,57 @@ public class HomeFragment extends Fragment implements Animation.AnimationListene
                     ll_filter.startAnimation(animSideUp);
                 }
             }
+
+            @Override
+            public void searchQuery(String searchquery) {
+                searchAdapter.getFilter().filter(searchquery);
+            }
         });
         return view;
+    }
+
+    private List<String> createDumyData() {
+        List<String> barList = new ArrayList<>();
+        barList.add("BABY DOLLS DALLAS");
+        barList.add("BABY DOLLS FORT WORTH");
+        barList.add("BTS CABARET");
+        barList.add("BUCKS CABARET DALLAS");
+        barList.add("BUCKS CABARET FORTH WORTH");
+        barList.add("BUCKS WILD DALLAS");
+        barList.add("BUCKS WILD FORT WORTH");
+        barList.add("CABARET EAST FORT WORTH");
+        barList.add("CHICAS BONITAS");
+        barList.add("CHICAS LOCAS");
+        barList.add("CORSETS CABARET");
+        barList.add("DALLAS CABARET NORTH");
+        barList.add("DALLAS CABARET SOUTH");
+        barList.add("DG'S GENTLEMENS CLUB");
+        barList.add("FLASH ");
+        barList.add("FOXYS CABARET");
+        barList.add("KINGS CABARET");
+        barList.add("LA BARES");
+        barList.add("LIPSTICK MENS CLUB");
+        barList.add("LUCKYS CABARET");
+        barList.add("ONYXS CLUB");
+        barList.add("PANDORAS MENS CLUB");
+        barList.add("PINUPS CABARET");
+        barList.add("PT'S MENS CLUB");
+        barList.add("RICK'S CABARET DFW");
+        barList.add("RICK'S CABARET FORT WORTH");
+        barList.add("ROXY'S SHOWGIRLS");
+        barList.add("SILVER CITY CABARET");
+        barList.add("SPEARMINT RHINO");
+        barList.add("STARZ CABARET");
+        barList.add("STILETTO'S CABARET");
+        barList.add("TEMPTATIONS");
+        barList.add("THE CLUBHOUSE");
+        barList.add("THE LODGE");
+        barList.add("THE MEN'S CLUB");
+        barList.add("TIGER'S CABARET");
+        barList.add("V LIVE");
+        barList.add("XTC CABARET");
+        barList.add("ZONA ROSA");
+        return barList;
     }
 
     @Override
