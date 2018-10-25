@@ -1,4 +1,4 @@
-package com.stage1;
+package com.stage1.Fragments;
 
 
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.stage1.Adapters.InboxAdapter;
+import com.stage1.R;
 
 
 /**

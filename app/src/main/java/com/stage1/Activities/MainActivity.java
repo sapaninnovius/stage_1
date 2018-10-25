@@ -1,29 +1,22 @@
-package com.stage1;
-
-import android.annotation.SuppressLint;
+package com.stage1.Activities;
 
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.ParcelUuid;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.internal.BottomNavigationItemView;
-import android.support.design.internal.BottomNavigationMenuView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,13 +24,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.support.v7.widget.SearchView;
-import android.widget.Toast;
 
-import java.lang.reflect.Field;
+import com.stage1.Fragments.GalaryFragment;
+import com.stage1.Fragments.HomeFragment;
+import com.stage1.Fragments.InboxFragment;
+import com.stage1.R;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 

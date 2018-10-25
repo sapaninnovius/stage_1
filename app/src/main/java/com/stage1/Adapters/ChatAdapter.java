@@ -1,6 +1,5 @@
-package com.stage1;
+package com.stage1.Adapters;
 
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -8,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
+import com.stage1.R;
+
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> {
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {

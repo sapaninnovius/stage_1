@@ -1,15 +1,12 @@
-package com.stage1;
+package com.stage1.Fragments;
 
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.DividerItemDecoration;
@@ -24,7 +21,10 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
-import android.widget.Toast;
+
+import com.stage1.Adapters.GalaryAdapter;
+import com.stage1.Utils.ItemDecorationAlbumColumns;
+import com.stage1.R;
 
 import java.util.ArrayList;
 import java.util.List;

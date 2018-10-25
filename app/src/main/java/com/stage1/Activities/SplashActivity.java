@@ -1,9 +1,11 @@
-package com.stage1;
+package com.stage1.Activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
+
+import com.stage1.R;
 
 public class SplashActivity extends AppCompatActivity {
 

@@ -1,0 +1,372 @@
+package com.stage1.Activities;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.stage1.Models.ResponseRegistration;
+import com.stage1.Network.ApiClient;
+import com.stage1.Network.ApiInterface;
+import com.stage1.R;
+import com.stage1.ResponseRole;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class SignUpActivity extends AppCompatActivity {
+    View popup;
+    EditText
+            et_popup_fname,
+            et_popup_lname,
+            et_popup_phone,
+            et_popup_post,
+            et_popup_email,
+            et_popup_password;
+    Spinner sp_popup_post;
+    List<ResponseRole.Data> roleList;
+    String[] popUpContents;
+    PopupWindow popupWindowDogs;
+    private Button btn_sign_up_submit;
+    private CheckBox cb__sign_up_i_agree;
+
+    @Override
+
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
+        ((Button) findViewById(R.id.btn_signup_)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popup = popUpLayout(v, R.layout.activity_sign_up_detail, (ViewGroup) findViewById(R.id.rl_sign_up_detail));
+                initLayout();
+            }
+        });
+        ((TextView) findViewById(R.id.txt_signin)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        preparerolelist();
+    }
+
+    private void preparerolelist() {
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ResponseRole> getRole = apiService.getRole();
+
+        getRole.enqueue(new Callback<ResponseRole>() {
+
+            @Override
+            public void onResponse(Call<ResponseRole> call, Response<ResponseRole> response) {
+                if (response.body().getErrorCode() == 0 && response.body().getData().size() > 0)
+                    roleList = response.body().getData();
+                else
+                    Log.e(getClass().getName(), "something went wrong==>" + response.body().getErrorCode() + "==>" + response.body().getMessage() + "==>" + response.body().getData());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseRole> call, Throwable t) {
+                Log.e(getClass().getName(), t.getStackTrace().toString());
+            }
+        });
+    }
+
+    private void initLayout() {
+        et_popup_fname = popup.findViewById(R.id.et_sign_up_fname);
+        et_popup_lname = popup.findViewById(R.id.et_sign_up_lname);
+        et_popup_phone = popup.findViewById(R.id.et_sign_up_pno);
+        et_popup_post = popup.findViewById(R.id.et_sign_up_post);
+        et_popup_email = popup.findViewById(R.id.et_sign_up_email);
+        et_popup_password = popup.findViewById(R.id.et_sign_up_password);
+        sp_popup_post = popup.findViewById(R.id.sp_sign_up_post);
+        et_popup_email.setClickable(false);
+        et_popup_password.setClickable(false);
+        btn_sign_up_submit = popup.findViewById(R.id.btn_sign_up_submit);
+        cb__sign_up_i_agree = popup.findViewById(R.id.cb__sign_up_i_agree);
+        btn_sign_up_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (et_popup_fname.getText().toString().trim().length() == 0) {
+                    et_popup_fname.setError("Please enter first name");
+                    return;
+                }
+                if (et_popup_lname.getText().toString().trim().length() == 0) {
+                    et_popup_lname.setError("Please enter last name");
+                    return;
+                }
+                if (et_popup_phone.getText().toString().trim().length() == 0) {
+                    et_popup_phone.setError("Please enter correct phone number");
+                    return;
+                }
+                if (et_popup_post.getText().toString().trim().length() == 0) {
+                    String error_message="Please enter type from ";
+                    for(ResponseRole.Data row:roleList)
+                    {
+                        error_message = error_message +row.getRole();
+                    }
+                    error_message = error_message+".";
+                    et_popup_post.setError(error_message);
+                    return;
+                }
+                if (et_popup_fname.getText().toString().trim().length() > 0 &&
+                        et_popup_lname.getText().toString().trim().length() > 0 &&
+                        et_popup_phone.getText().toString().trim().length() > 0 &&
+                        et_popup_post.getText().toString().trim().length() > 0 &&
+                        et_popup_email.getText().toString().trim().length() > 0 &&
+                        et_popup_password.getText().toString().trim().length() > 0)
+                {
+                    int post=0;
+                    for (ResponseRole.Data row:roleList)
+                    {
+                        if (row.getRole().toLowerCase().equals(et_popup_post.getText().toString().toLowerCase().trim()))
+                        {
+                            post=row.getId();
+                        }
+                    }
+                    registerUser(et_popup_fname.getText().toString().trim(),
+                            et_popup_lname.getText().toString().trim(),
+                            et_popup_phone.getText().toString().trim(),
+                            post,
+                            et_popup_email.getText().toString().trim(),
+                            et_popup_password.getText().toString().trim());
+                }
+            }
+        });
+    /*    et_popup_post.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            private View v;
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                final List<String> roleList_ = new ArrayList<>();
+//                String[] roleList_;
+
+                for (ResponseRole.Data data: roleList)
+                {
+                    roleList_.add(data.getRole());
+                }
+                if (hasFocus)
+                {
+                    ArrayAdapter<String> postAdapter = new ArrayAdapter<String>(SignUpActivity.this,android.R.layout.simple_spinner_item,roleList_);
+                    postAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    sp_popup_post.setAdapter(postAdapter);
+                    sp_popup_post.setVisibility(View.VISIBLE);
+//                    et_popup_post.setVisibility(View.GONE);
+
+                    new Thread(new Runnable() {
+                        public void run() {
+                            // DO NOT ATTEMPT TO DIRECTLY UPDATE THE UI HERE, IT WON'T WORK!
+                            // YOU MUST POST THE WORK TO THE UI THREAD'S HANDLER
+                            new Handler().postDelayed(new Runnable() {
+                                public void run() {
+                                    // Open the Spinner...
+                                    pw.dismiss();
+
+                                    popupWindowDogs.showAsDropDown(et_popup_post, -5, 0);
+//                                    sp_popup_post.performClick();
+                                }
+                            }, 5000);
+                        }
+                    }).start();
+//                    sp_popup_post.performClick();
+//                    sp_popup_post.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                            sp_popup_post.setVisibility(View.GONE);
+//                            et_popup_post.setText(roleList.get(position).getRole());
+//                        }
+//                    });
+                }
+            }
+        });*/
+//        postdropdown();
+    }
+
+    private void registerUser(String fname, String lname, String phone, int post, String email, String password) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseRegistration> responseRegistrationCall = apiInterface.newRegister(fname+" "+ lname, phone,post , email, password);
+        responseRegistrationCall.enqueue(new Callback<ResponseRegistration>() {
+            @Override
+            public void onResponse(Call<ResponseRegistration> call, Response<ResponseRegistration> response) {
+                Toast.makeText(SignUpActivity.this, ""+response.body().getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<ResponseRegistration> call, Throwable t) {
+                Toast.makeText(SignUpActivity.this, ""+t.getStackTrace().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    /* private void postdropdown() {
+         // initialize pop up window items list
+
+         // add items on the array dynamically
+         // format is DogName::DogID
+         List<String> dogsList = new ArrayList<String>();
+         dogsList.add("Akita Inu::1");
+         dogsList.add("Alaskan Klee Kai::2");
+         dogsList.add("Papillon::3");
+         dogsList.add("Tibetan Spaniel::4");
+
+         // convert to simple array
+         popUpContents = new String[dogsList.size()];
+         dogsList.toArray(popUpContents);
+
+
+         // initialize pop up window
+         popupWindowDogs = popupWindowDogs();
+
+
+         // button on click listener
+
+         View.OnClickListener handler = new View.OnClickListener() {
+             public void onClick(View v) {
+
+                 switch (v.getId()) {
+
+                     case R.id.et_sign_up_post:
+                         // show the list view as dropdown
+                         popupWindowDogs.showAsDropDown(v, -5, 0);
+                         break;
+                 }
+             }
+         };
+
+ //        et_popup_post.setOnClickListener(handler);
+     }
+
+     public PopupWindow popupWindowDogs() {
+
+         // initialize a pop up window type
+         PopupWindow popupWindow = new PopupWindow(this);
+
+         // the drop down list is a list view
+         ListView listViewDogs = new ListView(this);
+
+         // set our adapter and pass our pop up window contents
+         listViewDogs.setAdapter(dogsAdapter(popUpContents));
+
+         // set the item click listener
+         listViewDogs.setOnItemClickListener(new DogsDropdownOnItemClickListener());
+
+         // some other visual settings
+         popupWindow.setFocusable(true);
+         popupWindow.setWidth(250);
+         popupWindow.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+
+         // set the list view as pop up window content
+         popupWindow.setContentView(listViewDogs);
+
+         return popupWindow;
+     }
+
+
+ *//*     * adapter where the list values will be set*//*
+
+    private ArrayAdapter<String> dogsAdapter(String dogsArray[]) {
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, dogsArray) {
+
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+
+                // setting the ID and text for every items in the list
+                String item = getItem(position);
+                String[] itemArr = item.split("::");
+                String text = itemArr[0];
+                String id = itemArr[1];
+
+                // visual settings for the list item
+                TextView listItem = new TextView(SignUpActivity.this);
+
+                listItem.setText(text);
+                listItem.setTag(id);
+                listItem.setTextSize(22);
+                listItem.setPadding(10, 10, 10, 10);
+                listItem.setTextColor(Color.WHITE);
+
+                return listItem;
+            }
+        };
+
+        return adapter;
+    }
+    public class DogsDropdownOnItemClickListener implements AdapterView.OnItemClickListener {
+
+        String TAG = "DogsDropdownOnItemClickListener.java";
+
+        @Override
+        public void onItemClick(AdapterView<?> arg0, View v, int arg2, long arg3) {
+
+            // get the context and main activity to access variables
+            Context mContext = v.getContext();
+            SignUpActivity mainActivity = ((SignUpActivity) mContext);
+
+            // add some animation when a list item was clicked
+            Animation fadeInAnimation = AnimationUtils.loadAnimation(v.getContext(), android.R.anim.fade_in);
+            fadeInAnimation.setDuration(10);
+            v.startAnimation(fadeInAnimation);
+
+            // dismiss the pop up
+            mainActivity.popupWindowDogs.dismiss();
+
+            // get the text and set it as the button text
+            String selectedItemText = ((TextView) v).getText().toString();
+//            mainActivity.buttonShowDropDown.setText(selectedItemText);
+
+            // get the id
+            String selectedItemTag = ((TextView) v).getTag().toString();
+            Toast.makeText(mContext, "Dog ID is: " + selectedItemTag, Toast.LENGTH_SHORT).show();
+
+        }
+
+    }*/
+    PopupWindow pw;
+
+    @SuppressLint("NewApi")
+    View popUpLayout(View source_view, int screen_source, ViewGroup parent) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        //Inflate the view from a predefined XML layout
+        View layout = inflater.inflate(screen_source, parent);
+        // create a 300px width and 470px height PopupWindow
+        Drawable dim = new ColorDrawable(Color.BLACK);
+        dim.setBounds(0, 0, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
+        dim.setAlpha((int) (255 * 1));
+        layout.getOverlay().add(dim);
+
+        pw = new PopupWindow(layout, WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT, true);
+        // display the popup in the center
+        pw.showAtLocation(source_view, Gravity.CENTER, -115, 50);
+        return layout;
+    }
+}

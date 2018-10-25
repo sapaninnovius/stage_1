@@ -1,4 +1,4 @@
-package com.stage1;
+package com.stage1.Utils;
 import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

@@ -1,7 +1,5 @@
-package com.stage1;
+package com.stage1.Fragments;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -14,7 +12,10 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
-import android.widget.Toast;
+
+import com.stage1.Activities.MainActivity;
+import com.stage1.R;
+import com.stage1.Adapters.SearchAdapter;
 
 import java.util.ArrayList;
 import java.util.List;

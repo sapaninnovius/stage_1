@@ -1,9 +1,11 @@
-package com.stage1;
+package com.stage1.Activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.stage1.R;
 
 public class NotificationActivity extends AppCompatActivity {
 

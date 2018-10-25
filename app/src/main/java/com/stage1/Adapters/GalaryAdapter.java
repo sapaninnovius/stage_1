@@ -1,10 +1,5 @@
-package com.stage1;
+package com.stage1.Adapters;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,7 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import java.io.ByteArrayOutputStream;
+import com.stage1.R;
+
 import java.util.List;
 
 public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHolder> {

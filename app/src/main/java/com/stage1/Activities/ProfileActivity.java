@@ -1,4 +1,4 @@
-package com.stage1;
+package com.stage1.Activities;
 
 import android.annotation.SuppressLint;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.stage1.R;
 
 public class ProfileActivity extends AppCompatActivity {
     Toolbar toolbar;

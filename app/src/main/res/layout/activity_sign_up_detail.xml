@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_sign_up_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/transparent">
+
+    <View
+        android:id="@+id/opacityFilter"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:alpha="0.7"
+        android:background="@android:color/black" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/_15sdp">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/rounded_cornor_popup"
+            android:padding="@dimen/_5sdp">
+
+            <EditText
+                android:inputType="text"
+                android:id="@+id/et_sign_up_fname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_25sdp"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="First Name"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:inputType="text"
+                android:id="@+id/et_sign_up_lname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Last Name"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_pno"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_fname"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_fname"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_fname" />
+
+            <EditText
+                android:inputType="number"
+                android:id="@+id/et_sign_up_pno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Phone No."
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_post"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_lname"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_lname"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_lname" />
+
+            <Spinner
+                android:visibility="gone"
+                android:inputType="text"
+                android:id="@+id/sp_sign_up_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Post"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_email"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_pno"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_pno"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_pno"/>
+
+            <EditText
+                android:inputType="text"
+                android:id="@+id/et_sign_up_post"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Post"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_email"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_pno"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_pno"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_pno" />
+
+            <EditText
+                android:inputType="textEmailAddress"
+                android:id="@+id/et_sign_up_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Email ID"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_password"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_post"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_post"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_post" />
+
+            <EditText
+                android:inputType="textPassword"
+                android:id="@+id/et_sign_up_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Password"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/cb__sign_up_i_agree"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_email"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_email"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_email" />
+
+            <CheckBox
+                android:id="@+id/cb__sign_up_i_agree"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:buttonTint="@android:color/white"
+                android:text="I agree to Stage 1 Terms and Conditions."
+                android:textColor="@android:color/holo_red_light"
+                app:layout_constraintBottom_toTopOf="@id/btn_sign_up_submit"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_password"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_password"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_password" />
+
+            <Button
+                android:id="@+id/btn_sign_up_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_cornor_background"
+                android:backgroundTint="@android:color/white"
+                android:paddingLeft="@dimen/_30sdp"
+                android:paddingRight="@dimen/_30sdp"
+                android:text="Submit"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/_14ssp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="@id/cb__sign_up_i_agree"
+                app:layout_constraintRight_toRightOf="@id/cb__sign_up_i_agree"
+                app:layout_constraintTop_toBottomOf="@id/cb__sign_up_i_agree" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v4.widget.NestedScrollView>
+</RelativeLayout>

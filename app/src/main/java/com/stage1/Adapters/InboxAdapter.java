@@ -1,4 +1,4 @@
-package com.stage1;
+package com.stage1.Adapters;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.stage1.Activities.ChatActivity;
+import com.stage1.R;
 
 public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder> {
     @NonNull

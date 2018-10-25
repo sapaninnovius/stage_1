@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SignUpActivity">
+    tools:context=".Activities.SignUpActivity">
 
     <ImageView
         android:layout_width="match_parent"
@@ -23,7 +23,7 @@
         android:layout_height="match_parent"
         android:paddingLeft="@dimen/_25sdp"
         android:paddingRight="@dimen/_25sdp"
-        tools:context=".AuthActivity">
+        tools:context=".Activities.AuthActivity">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/img_logo"
@@ -45,6 +45,7 @@
             app:layout_constraintTop_toTopOf="@id/et_email" />
 
         <EditText
+            android:inputType="textEmailAddress"
             android:id="@+id/et_email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -62,7 +63,6 @@
 
         <ImageView
             android:layout_width="wrap_content"
-
             android:layout_height="wrap_content"
             android:background="@drawable/ic_password"
             android:backgroundTint="@android:color/holo_red_dark"
