@@ -2,6 +2,7 @@ package com.stage1.Models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+
 public class ResponseLogin {
     @SerializedName("data")
     @Expose
@@ -72,6 +73,7 @@ public class ResponseLogin {
         public void setUserDetail(UserDetail userDetail) {
             this.userDetail = userDetail;
         }
+
         public class UserDetail {
 
             @SerializedName("id")
@@ -103,10 +105,10 @@ public class ResponseLogin {
             private Integer barId;
             @SerializedName("lat")
             @Expose
-            private String lat;
+            private Object lat;
             @SerializedName("long")
             @Expose
-            private String _long;
+            private Object _long;
             @SerializedName("current_status")
             @Expose
             private Integer currentStatus;
@@ -119,6 +121,21 @@ public class ResponseLogin {
             @SerializedName("updated_at")
             @Expose
             private String updatedAt;
+            @SerializedName("street")
+            @Expose
+            private String street;
+            @SerializedName("apt")
+            @Expose
+            private String apt;
+            @SerializedName("city")
+            @Expose
+            private String city;
+            @SerializedName("zipcode")
+            @Expose
+            private String zipcode;
+            @SerializedName("state")
+            @Expose
+            private String state;
 
             public Integer getId() {
                 return id;
@@ -192,19 +209,19 @@ public class ResponseLogin {
                 this.barId = barId;
             }
 
-            public String getLat() {
+            public Object getLat() {
                 return lat;
             }
 
-            public void setLat(String lat) {
+            public void setLat(Object lat) {
                 this.lat = lat;
             }
 
-            public String getLong() {
+            public Object getLong() {
                 return _long;
             }
 
-            public void setLong(String _long) {
+            public void setLong(Object _long) {
                 this._long = _long;
             }
 
@@ -238,6 +255,46 @@ public class ResponseLogin {
 
             public void setUpdatedAt(String updatedAt) {
                 this.updatedAt = updatedAt;
+            }
+
+            public String getStreet() {
+                return street;
+            }
+
+            public void setStreet(String street) {
+                this.street = street;
+            }
+
+            public String getApt() {
+                return apt;
+            }
+
+            public void setApt(String apt) {
+                this.apt = apt;
+            }
+
+            public String getCity() {
+                return city;
+            }
+
+            public void setCity(String city) {
+                this.city = city;
+            }
+
+            public String getZipcode() {
+                return zipcode;
+            }
+
+            public void setZipcode(String zipcode) {
+                this.zipcode = zipcode;
+            }
+
+            public String getState() {
+                return state;
+            }
+
+            public void setState(String state) {
+                this.state = state;
             }
 
         }

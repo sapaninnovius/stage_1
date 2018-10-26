@@ -31,11 +31,11 @@
                 android:id="@+id/et_sign_up_fname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_25sdp"
                 android:backgroundTint="@android:color/holo_red_dark"
                 android:hint="First Name"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_lname"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -69,6 +69,7 @@
                 app:layout_constraintTop_toBottomOf="@id/et_sign_up_lname" />
 
             <Spinner
+                android:spinnerMode="dialog"
                 android:visibility="gone"
                 android:inputType="text"
                 android:id="@+id/sp_sign_up_post"
@@ -98,18 +99,34 @@
                 app:layout_constraintTop_toBottomOf="@id/et_sign_up_pno" />
 
             <EditText
+                android:hint="address"
+                android:id="@+id/et_sign_up_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_email"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_post"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_post"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_post" />
+
+
+
+
+            <EditText
                 android:inputType="textEmailAddress"
                 android:id="@+id/et_sign_up_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@android:color/holo_red_dark"
                 android:hint="Email ID"
+                android:backgroundTint="@android:color/holo_red_dark"
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/colorAccent"
                 app:layout_constraintBottom_toTopOf="@id/et_sign_up_password"
-                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_post"
-                app:layout_constraintRight_toRightOf="@id/et_sign_up_post"
-                app:layout_constraintTop_toBottomOf="@id/et_sign_up_post" />
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_address"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_address"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_address" />
 
             <EditText
                 android:inputType="textPassword"

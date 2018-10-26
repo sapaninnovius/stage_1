@@ -42,60 +42,170 @@ public class ResponseRegistration {
 
     public class Data {
 
-        @SerializedName("email")
-        @Expose
-        private List<String> email = null;
         @SerializedName("name")
         @Expose
-        private List<String> name = null;
+        private String name;
+        @SerializedName("email")
+        @Expose
+        private String email;
         @SerializedName("contact_number")
         @Expose
-        private List<String> contactNumber = null;
-        @SerializedName("role_id")
+        private String contactNumber;
+        @SerializedName("device_id")
         @Expose
-        private List<String> roleId = null;
+        private String deviceId;
         @SerializedName("password")
         @Expose
-        private List<String> password = null;
+        private String password;
+        @SerializedName("role_id")
+        @Expose
+        private String roleId;
+        @SerializedName("bar_id")
+        @Expose
+        private Integer barId;
+        @SerializedName("street")
+        @Expose
+        private String street;
+        @SerializedName("apt")
+        @Expose
+        private String apt;
+        @SerializedName("city")
+        @Expose
+        private String city;
+        @SerializedName("zipcode")
+        @Expose
+        private String zipcode;
+        @SerializedName("state")
+        @Expose
+        private String state;
+        @SerializedName("updated_at")
+        @Expose
+        private String updatedAt;
+        @SerializedName("created_at")
+        @Expose
+        private String createdAt;
+        @SerializedName("id")
+        @Expose
+        private Integer id;
 
-        public List<String> getEmail() {
-            return email;
-        }
-
-        public void setEmail(List<String> email) {
-            this.email = email;
-        }
-
-        public List<String> getName() {
+        public String getName() {
             return name;
         }
 
-        public void setName(List<String> name) {
+        public void setName(String name) {
             this.name = name;
         }
 
-        public List<String> getContactNumber() {
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getContactNumber() {
             return contactNumber;
         }
 
-        public void setContactNumber(List<String> contactNumber) {
+        public void setContactNumber(String contactNumber) {
             this.contactNumber = contactNumber;
         }
 
-        public List<String> getRoleId() {
-            return roleId;
+        public String getDeviceId() {
+            return deviceId;
         }
 
-        public void setRoleId(List<String> roleId) {
-            this.roleId = roleId;
+        public void setDeviceId(String deviceId) {
+            this.deviceId = deviceId;
         }
 
-        public List<String> getPassword() {
+        public String getPassword() {
             return password;
         }
 
-        public void setPassword(List<String> password) {
+        public void setPassword(String password) {
             this.password = password;
+        }
+
+        public String getRoleId() {
+            return roleId;
+        }
+
+        public void setRoleId(String roleId) {
+            this.roleId = roleId;
+        }
+
+        public Integer getBarId() {
+            return barId;
+        }
+
+        public void setBarId(Integer barId) {
+            this.barId = barId;
+        }
+
+        public String getStreet() {
+            return street;
+        }
+
+        public void setStreet(String street) {
+            this.street = street;
+        }
+
+        public String getApt() {
+            return apt;
+        }
+
+        public void setApt(String apt) {
+            this.apt = apt;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getZipcode() {
+            return zipcode;
+        }
+
+        public void setZipcode(String zipcode) {
+            this.zipcode = zipcode;
+        }
+
+        public String getState() {
+            return state;
+        }
+
+        public void setState(String state) {
+            this.state = state;
+        }
+
+        public String getUpdatedAt() {
+            return updatedAt;
+        }
+
+        public void setUpdatedAt(String updatedAt) {
+            this.updatedAt = updatedAt;
+        }
+
+        public String getCreatedAt() {
+            return createdAt;
+        }
+
+        public void setCreatedAt(String createdAt) {
+            this.createdAt = createdAt;
+        }
+
+        public Integer getId() {
+            return id;
+        }
+
+        public void setId(Integer id) {
+            this.id = id;
         }
 
     }

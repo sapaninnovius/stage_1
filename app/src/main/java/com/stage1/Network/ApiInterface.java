@@ -6,6 +6,7 @@ import com.stage1.ResponseRole;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -19,14 +20,23 @@ public interface ApiInterface {
 
     @GET("getrole")
     Call<ResponseRole> getRole();
-
+    @Headers({
+            "Accept: application/json",
+            "User-Agent: multipart/form-data"
+    })
     @POST("registration")
     Call<ResponseRegistration> newRegister(
             @Query("name") String name,
             @Query("contact_number") String phone,
             @Query("role_id") int post,
             @Query("email") String email,
-            @Query("password") String password);
+            @Query("password") String password,
+            @Query("device_id") String device_id,
+            @Query("street") String street,
+            @Query("apt") String apt,
+            @Query("city") String city,
+            @Query("zipcode") String zipcode,
+            @Query("state") String state);
 
 
     @POST("login")
