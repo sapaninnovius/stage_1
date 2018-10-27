@@ -120,6 +120,7 @@ public class AuthActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
                 if (response.body().getErrorCode() == 0) {
                     new PrefManager(AuthActivity.this).setLogin(true);
+                    new PrefManager(AuthActivity.this).storeUser(response.body().getData());
                     startActivity(new Intent(AuthActivity.this, MainActivity.class));
                     AuthActivity.this.finish();
                 }

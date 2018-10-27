@@ -15,26 +15,43 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.design.widget.CollapsingToolbarLayout
+            app:expandedTitleTextAppearance="@android:color/transparent"
             android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            >
 
 
 
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_gravity="center"
+                android:paddingTop="@dimen/_25sdp"
+                android:paddingBottom="@dimen/_25sdp"
                 android:id="@+id/expandedImage"
-                android:layout_width="match_parent"
+                android:layout_width="@dimen/_200sdp"
                 android:layout_height="@dimen/_200sdp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/ln_logo"
+                android:src="@mipmap/ic_launcher_round"
                 app:layout_collapseMode="parallax"
                 app:layout_collapseParallaxMultiplier="0.7" />
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/img_pp_edit"
+                android:layout_marginBottom="@dimen/_10sdp"
+                android:layout_marginRight="@dimen/_85sdp"
+                android:layout_gravity="bottom|right"
+                android:background="@drawable/round_cornor_edit"
+                android:padding="@dimen/_1sdp"
+                android:tint="@android:color/black"
+                android:src="@android:drawable/ic_menu_camera"
+                android:layout_width="@dimen/_25sdp"
+                android:layout_height="@dimen/_25sdp" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
+                app:title=""
+                app:subtitle=""
+                app:titleTextColor="@color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"

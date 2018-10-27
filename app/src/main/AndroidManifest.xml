@@ -33,6 +33,8 @@
         <activity android:name=".Activities.ChatActivity" />
         <activity android:name=".Activities.NotificationActivity" />
         <activity android:name=".Activities.ImageDialogActivity" android:theme="@style/Theme.Transparent"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat"/> <!-- optional (needed if default theme has no action bar) -->
     </application>
 
 </manifest>

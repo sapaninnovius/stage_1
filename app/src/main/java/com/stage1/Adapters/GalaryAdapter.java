@@ -7,16 +7,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.stage1.Activities.ProfileActivity;
+import com.stage1.Models.GetAllMediaDetail;
 import com.stage1.R;
+import com.stage1.Utils.PrefManager;
 
 import java.util.List;
 
 public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHolder> {
 
-    private final List<Integer> img_list;
+    private final List<GetAllMediaDetail.Datum> img_list;
     OnItemClickListener onItemClickListener;
 
-    public GalaryAdapter(List<Integer> img_list, OnItemClickListener onItemClickListener) {
+    public GalaryAdapter(List<GetAllMediaDetail.Datum> img_list, OnItemClickListener onItemClickListener) {
         this.img_list=img_list;
         this.onItemClickListener =onItemClickListener;
     }
@@ -30,12 +34,12 @@ public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        myViewHolder.img_gallery.setImageResource(img_list.get(i));
+        Glide.with(myViewHolder.img_gallery.getContext()).load(new PrefManager(myViewHolder.img_gallery.getContext()).getpath()+img_list.get(i).getFilePath()).into(myViewHolder.img_gallery);
     }
 
     @Override
     public int getItemCount() {
-        return 10;
+        return img_list.size();
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

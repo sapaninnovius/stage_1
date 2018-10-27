@@ -31,6 +31,7 @@ import com.stage1.Fragments.GalaryFragment;
 import com.stage1.Fragments.HomeFragment;
 import com.stage1.Fragments.InboxFragment;
 import com.stage1.R;
+import com.stage1.Utils.PrefManager;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -157,8 +158,13 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     private void showauthactivity() {
+        clearData();
         startActivity(new Intent(this,AuthActivity.class));
         finish();
+    }
+
+    private void clearData() {
+        new PrefManager(MainActivity.this).clearData();
     }
 
     private void showMyDialog() {
