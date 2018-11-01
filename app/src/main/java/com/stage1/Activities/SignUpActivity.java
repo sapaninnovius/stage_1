@@ -1,40 +1,35 @@
 package com.stage1.Activities;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.location.Address;
-import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
 import com.stage1.Adapters.PlaceAutocompleteAdapter;
 import com.stage1.Models.ResponseLogin;
 import com.stage1.Models.ResponseRegistration;
@@ -45,7 +40,6 @@ import com.stage1.ResponseRole;
 import com.stage1.Utils.PrefManager;
 import com.stage1.Utils.Validators;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -65,7 +59,7 @@ public class SignUpActivity extends AppCompatActivity {
             et_popup_phone,
             et_popup_post,
             et_popup_email,
-            et_popup_password;
+            et_popup_password,et_popup_gender;
     Spinner sp_popup_post;
     List<ResponseRole.Data> roleList;
     String[] popUpContents;
@@ -73,6 +67,10 @@ public class SignUpActivity extends AppCompatActivity {
     private Button btn_sign_up_submit;
     private CheckBox cb__sign_up_i_agree;
     PlaceAutocompleteAdapter placeAdapter;
+    private ProgressDialog pDialog;
+    private boolean flag_pwd_confirm,flag_pwd;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +78,64 @@ public class SignUpActivity extends AppCompatActivity {
         et_register_email = findViewById(R.id.et_register_email);
         et_register_password = findViewById(R.id.et_register_password);
         et_confirm_password = findViewById(R.id.et_confirm_password);
+        flag_pwd=false;
+        flag_pwd_confirm=false;
+//        et_register_password.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final int DRAWABLE_LEFT = 0;
+//                final int DRAWABLE_TOP = 1;
+//                final int DRAWABLE_RIGHT = 2;
+//                final int DRAWABLE_BOTTOM = 3;
+//                if (event.getAction()==MotionEvent.ACTION_UP){
+//                    if(event.getRawX() >= (et_register_password.getRight() - et_register_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+//                        // your action here
+//                        if (flag_pwd) {
+//                            flag_pwd = false;
+//                            et_register_password.setTransformationMethod(new PasswordTransformationMethod());
+//                        }else
+//                        {
+//                            flag_pwd = true;
+//                            et_register_password.setTransformationMethod(new HideReturnsTransformationMethod());
+//                        }
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+//        et_confirm_password.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                final int DRAWABLE_LEFT = 0;
+//                final int DRAWABLE_TOP = 1;
+//                final int DRAWABLE_RIGHT = 2;
+//                final int DRAWABLE_BOTTOM = 3;
+//                if (event.getAction()==MotionEvent.ACTION_UP){
+//                    if(event.getRawX() >= (et_confirm_password.getRight() - et_confirm_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+//                        // your action here
+//                        if (flag_pwd_confirm) {
+//                            flag_pwd_confirm = false;
+//                            et_confirm_password.setTransformationMethod(new PasswordTransformationMethod());
+//                        }else
+//                        {
+//                            flag_pwd_confirm = true;
+//                            et_confirm_password.setTransformationMethod(new HideReturnsTransformationMethod());
+//                        }
+//                        return true;
+//                    }
+//                }
+//                return false;
+//            }
+//        });
+        pDialog = new ProgressDialog(this);
+        // Set progressbar title
+//        pDialog.setTitle("Android Video Streaming Tutorial");
+        // Set progressbar message
+//        pDialog.setMessage("Buffering...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+
         et_register_email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -89,7 +145,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!Validators.isValidEmail(s))
-                et_register_email.setError("Please enter email id");
+                    et_register_email.setError("Please enter email id");
             }
 
             @Override
@@ -105,7 +161,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (s.toString().trim().length()==0)
+                if (s.toString().trim().length() == 0)
                     et_register_password.setError("Please enter password");
             }
 
@@ -122,7 +178,7 @@ public class SignUpActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    if (!et_confirm_password.getText().toString().trim().equals(et_register_password.getText().toString().trim()))
+                if (!et_confirm_password.getText().toString().trim().equals(et_register_password.getText().toString().trim()))
                     et_confirm_password.setError("Must match with previous entry");
             }
 
@@ -134,21 +190,27 @@ public class SignUpActivity extends AppCompatActivity {
         ((Button) findViewById(R.id.btn_signup_)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                if (et_register_email.getText().toString().trim().length() > 0 && et_register_password.getText().toString().trim().length() > 0 && et_confirm_password.getText().toString().trim().length() > 0) {
-                    popup = popUpLayout(v, R.layout.activity_sign_up_detail, (ViewGroup) findViewById(R.id.rl_sign_up_detail));
-                    initLayout();
+               /* startActivityForResult(
+                        new Intent(SignUpActivity.this, SignUpDetailActivity.class)
+                                .putExtra("email", et_register_email.getText().toString().trim())
+                                .putExtra("pwd", et_register_password.getText().toString().trim()
+                                ), 1000);*/
+                if (et_register_email.getText().toString().trim().length() > 6 && et_register_password.getText().toString().trim().length() > 6 && et_confirm_password.getText().toString().trim().length() > 6) {
+//                    popup = popUpLayout(v, R.layout.activity_sign_up_detail, (ViewGroup) findViewById(R.id.rl_sign_up_detail));
+//                    initLayout();
+                    startActivityForResult(
+                            new Intent(SignUpActivity.this, SignUpDetailActivity.class)
+                                    .putExtra("email", et_register_email.getText().toString().trim())
+                                    .putExtra("pwd", et_register_password.getText().toString().trim()
+                                    ), 1000);
                 } else {
-                    if (et_register_email.getText().toString().trim().length()==0)
-                    {
+                    if (et_register_email.getText().toString().trim().length() <7) {
                         et_register_email.setError("Please enter email id");
                     }
-                    if(et_register_password.getText().toString().trim().length()==0)
-                    {
+                    if (et_register_password.getText().toString().trim().length() < 7) {
                         et_register_password.setError("Please enter password");
                     }
-                    if(et_confirm_password.getText().toString().trim().length()==0)
-                    {
+                    if (et_confirm_password.getText().toString().trim().length() <7) {
                         et_confirm_password.setError("Must match with previous entry");
                     }
                 }
@@ -163,33 +225,13 @@ public class SignUpActivity extends AppCompatActivity {
 //        mGoogleApiClient = new GoogleApiClient.Builder(this).addApi(LocationServices.API).build();
 //        placeAdapter = new PlaceAutocompleteAdapter(this, R.layout.layout_view_placesearch,
 //                mGoogleApiClient, null, null);
-        preparerolelist();
+
     }
 
-    private void preparerolelist() {
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
 
-        Call<ResponseRole> getRole = apiService.getRole();
-
-        getRole.enqueue(new Callback<ResponseRole>() {
-
-            @Override
-            public void onResponse(Call<ResponseRole> call, Response<ResponseRole> response) {
-                if (response.body().getErrorCode() == 0 && response.body().getData().size() > 0)
-                    roleList = response.body().getData();
-                else
-                    Log.e(getClass().getName(), "something went wrong==>" + response.body().getErrorCode() + "==>" + response.body().getMessage() + "==>" + response.body().getData());
-            }
-
-            @Override
-            public void onFailure(Call<ResponseRole> call, Throwable t) {
-                Log.e(getClass().getName(), t.getStackTrace().toString());
-            }
-        });
-    }
 
     private void initLayout() {
+        et_popup_gender= popup.findViewById(R.id.et_gender);
         et_sign_up_address = popup.findViewById(R.id.et_sign_up_address);
         et_popup_fname = popup.findViewById(R.id.et_sign_up_fname);
         et_popup_lname = popup.findViewById(R.id.et_sign_up_lname);
@@ -223,7 +265,7 @@ public class SignUpActivity extends AppCompatActivity {
         btn_sign_up_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              validate();
+                validate();
             }
         });
 //        et_popup_post.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -289,15 +331,12 @@ public class SignUpActivity extends AppCompatActivity {
     private void validate() {
         if (et_popup_fname.getText().toString().trim().length() == 0) {
             et_popup_fname.setError("Please enter first name");
-            return;
         }
         if (et_popup_lname.getText().toString().trim().length() == 0) {
             et_popup_lname.setError("Please enter last name");
-            return;
         }
         if (et_popup_phone.getText().toString().trim().length() == 0) {
             et_popup_phone.setError("Please enter correct phone number");
-            return;
         }
         if (et_popup_post.getText().toString().trim().length() == 0) {
             String error_message = "Please enter type from ";
@@ -306,14 +345,16 @@ public class SignUpActivity extends AppCompatActivity {
             }
             error_message = error_message + ".";
             et_popup_post.setError(error_message);
-            return;
+        }
+        if (et_sign_up_address.getText().toString().trim().length() == 0) {
+            et_sign_up_address.setError("Please enter address");
         }
         if (et_popup_fname.getText().toString().trim().length() > 0 &&
                 et_popup_lname.getText().toString().trim().length() > 0 &&
                 et_popup_phone.getText().toString().trim().length() > 0 &&
                 et_popup_post.getText().toString().trim().length() > 0 &&
                 et_popup_email.getText().toString().trim().length() > 0 &&
-                et_popup_password.getText().toString().trim().length() > 0) {
+                et_popup_password.getText().toString().trim().length() > 0 && et_sign_up_address.getText().toString().trim().length() > 0) {
             int post = 0;
             for (ResponseRole.Data row : roleList) {
                 if (row.getRole().toLowerCase().equals(et_popup_post.getText().toString().toLowerCase().trim())) {
@@ -325,11 +366,12 @@ public class SignUpActivity extends AppCompatActivity {
                     et_popup_phone.getText().toString().trim(),
                     post,
                     et_popup_email.getText().toString().trim(),
-                    et_popup_password.getText().toString().trim(),"123","123","123","123","123","123");
+                    et_popup_password.getText().toString().trim(), "123"/*,"123","123","123","123","123"*/,
+                    et_sign_up_address.getText().toString().trim(), et_popup_gender.getText().toString().trim());
         }
     }
 
-    private void registerUser(String fname, String lname, String phone, int post, final String email, final String password,String token,String street,String apt,String city,String zipcode,String state) {
+    private void registerUser(String fname, String lname, String phone, int post, final String email, final String password, String token,/*String street,String apt,String city,String zipcode,String state,*/String address, String gender) {
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseRegistration> responseRegistrationCall = apiInterface.newRegister(
                 fname + " " + lname,
@@ -338,11 +380,13 @@ public class SignUpActivity extends AppCompatActivity {
                 email,
                 password,
                 token,
-                street,
+               /* street,
                 apt,
                 city,
                 zipcode,
-                state);
+                state*/
+                address,gender);
+        pDialog.show();
         responseRegistrationCall.enqueue(new Callback<ResponseRegistration>() {
             @Override
             public void onResponse(Call<ResponseRegistration> call, Response<ResponseRegistration> response) {
@@ -350,17 +394,19 @@ public class SignUpActivity extends AppCompatActivity {
                 if (response.body().getErrorCode() == 0) {
                     loginUser(email, password);
                 }
+                pDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseRegistration> call, Throwable t) {
-                Snackbar.make(popup,"Something went wrong",Snackbar.LENGTH_LONG).setAction("Try Again", new View.OnClickListener() {
+                Snackbar.make(popup, "Something went wrong", Snackbar.LENGTH_LONG).setAction("Try Again", new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                       validate();
+                        validate();
                     }
                 }).setActionTextColor(getResources().getColor(R.color.colorPrimary)).show();
 //                Toast.makeText(SignUpActivity.this, "" + t.getStackTrace().toString(), Toast.LENGTH_SHORT).show();
+                pDialog.dismiss();
             }
         });
     }
@@ -369,6 +415,7 @@ public class SignUpActivity extends AppCompatActivity {
         String deviceID = "asdasdasd", lat = "34232", lng = "3423433";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseLogin> responseLoginCall = apiInterface.login(email, password, deviceID, lat, lng);
+        pDialog.show();
         responseLoginCall.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
@@ -378,11 +425,12 @@ public class SignUpActivity extends AppCompatActivity {
                     startActivity(new Intent(SignUpActivity.this, MainActivity.class));
                     SignUpActivity.this.finish();
                 }
+                pDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseLogin> call, Throwable t) {
-
+                pDialog.dismiss();
             }
         });
     }
@@ -528,5 +576,10 @@ public class SignUpActivity extends AppCompatActivity {
         // display the popup in the center
         pw.showAtLocation(source_view, Gravity.CENTER, -115, 50);
         return layout;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -21,4 +21,6 @@ public class User_Constant {
     public static final String city = "city";
     public static final String zipcode = "zipcode";
     public static final String state = "state";
+    public static final String address = "address";
+    public static final String gander = "gander";
 }

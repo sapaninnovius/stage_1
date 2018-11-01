@@ -103,7 +103,7 @@
             android:layout_gravity="bottom"
             android:clickable="true"
             android:orientation="vertical">
-        <TextView
+       <!-- <TextView
             android:id="@+id/footer_item_1"
             android:layout_width="match_parent"
             android:layout_height="48dp"
@@ -114,7 +114,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:gravity="center"
-            android:text="Footer Item 2" />
+            android:text="Footer Item 2" />-->
         </LinearLayout>
     </android.support.design.widget.NavigationView>
     <!--app:headerLayout="@layout/nav_header" -->

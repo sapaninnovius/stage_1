@@ -1,14 +1,21 @@
 package com.stage1.Activities;
 
+import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.stage1.Models.ResponseLogin;
 import com.stage1.Network.ApiClient;
@@ -23,14 +30,48 @@ import retrofit2.Response;
 
 public class AuthActivity extends AppCompatActivity {
     EditText et_email, et_password;
+    private ProgressDialog pDialog;
 
-
+    boolean flag;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_auth);
         et_email = findViewById(R.id.et_email);
-        et_password = findViewById(R.id.et_password);
+        et_password = findViewById(R.id.etPassword);
+        pDialog = new ProgressDialog(this);
+        // Set progressbar title
+//        pDialog.setTitle("Android Video Streaming Tutorial");
+        // Set progressbar message
+//        pDialog.setMessage("Buffering...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+
+        flag = false;
+      /*  et_password.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+                if (event.getAction()==MotionEvent.ACTION_UP){
+                    if(event.getRawX() >= (et_password.getRight() - et_password.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+                        // your action here
+                        if (flag) {
+                            flag = false;
+                            et_password.setTransformationMethod(new PasswordTransformationMethod());
+                        }else
+                        {
+                            flag = true;
+                            et_password.setTransformationMethod(new HideReturnsTransformationMethod());
+                        }
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });*/
        /* AlertDialog.Builder builder = new AlertDialog.Builder(AuthActivity.this);
         builder.setPositiveButton("", new DialogInterface.OnClickListener() {
             @Override
@@ -115,6 +156,7 @@ public class AuthActivity extends AppCompatActivity {
         String deviceID = "asdasdasd", lat = "34232", lng = "3423433";
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         Call<ResponseLogin> responseLoginCall = apiInterface.login(email, password, deviceID, lat, lng);
+        pDialog.show();
         responseLoginCall.enqueue(new Callback<ResponseLogin>() {
             @Override
             public void onResponse(Call<ResponseLogin> call, Response<ResponseLogin> response) {
@@ -124,11 +166,16 @@ public class AuthActivity extends AppCompatActivity {
                     startActivity(new Intent(AuthActivity.this, MainActivity.class));
                     AuthActivity.this.finish();
                 }
+                else
+                {
+                    Toast.makeText(AuthActivity.this, "Invalid Email Or Password", Toast.LENGTH_SHORT).show();
+                }
+                pDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<ResponseLogin> call, Throwable t) {
-
+                pDialog.dismiss();
             }
         });
     }

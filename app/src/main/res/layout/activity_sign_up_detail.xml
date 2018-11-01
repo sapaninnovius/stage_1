@@ -5,7 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent">
-
+    <fragment
+        android:id="@+id/place_autocomplete_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
+        />
     <View
         android:id="@+id/opacityFilter"
         android:layout_width="match_parent"
@@ -63,10 +68,29 @@
                 android:hint="Phone No."
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/colorAccent"
-                app:layout_constraintBottom_toTopOf="@id/et_sign_up_post"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_gender"
                 app:layout_constraintLeft_toLeftOf="@id/et_sign_up_lname"
                 app:layout_constraintRight_toRightOf="@id/et_sign_up_lname"
                 app:layout_constraintTop_toBottomOf="@id/et_sign_up_lname" />
+
+            <EditText
+                android:drawableTint="@color/colorPrimary"
+                android:drawableRight="@drawable/ic_down_arrow"
+                android:visibility="visible"
+                android:focusable="false"
+                android:inputType="number"
+                android:id="@+id/et_sign_up_gender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@android:color/holo_red_dark"
+                android:hint="Gander"
+                android:textColor="@android:color/white"
+                android:textColorHint="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@id/et_sign_up_post"
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_pno"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_pno"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_pno" />
+
 
             <Spinner
                 android:spinnerMode="dialog"
@@ -85,6 +109,9 @@
                 app:layout_constraintTop_toBottomOf="@id/et_sign_up_pno"/>
 
             <EditText
+                android:drawableTint="@color/colorPrimary"
+                android:drawableRight="@drawable/ic_down_arrow"
+                android:focusable="false"
                 android:inputType="text"
                 android:id="@+id/et_sign_up_post"
                 android:layout_width="match_parent"
@@ -94,11 +121,13 @@
                 android:textColor="@android:color/white"
                 android:textColorHint="@color/colorAccent"
                 app:layout_constraintBottom_toTopOf="@id/et_sign_up_email"
-                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_pno"
-                app:layout_constraintRight_toRightOf="@id/et_sign_up_pno"
-                app:layout_constraintTop_toBottomOf="@id/et_sign_up_pno" />
+                app:layout_constraintLeft_toLeftOf="@id/et_sign_up_gender"
+                app:layout_constraintRight_toRightOf="@id/et_sign_up_gender"
+                app:layout_constraintTop_toBottomOf="@id/et_sign_up_gender" />
 
             <EditText
+                android:lines="1"
+                android:focusable="false"
                 android:hint="address"
                 android:id="@+id/et_sign_up_address"
                 android:layout_width="match_parent"

@@ -137,6 +137,35 @@ public class ResponseLogin {
             @Expose
             private String state;
 
+            @SerializedName("address")
+            @Expose
+            private String address;
+
+            @SerializedName("gender")
+            @Expose
+            private  String gander;
+
+            public void setGander(String gander) {
+                this.gander = gander;
+            }
+
+            public Object get_long() {
+                return _long;
+            }
+
+            public void set_long(Object _long) {
+                this._long = _long;
+            }
+
+            public String getAddress() {
+
+                return address;
+            }
+
+            public void setAddress(String address) {
+                this.address = address;
+            }
+
             public Integer getId() {
                 return id;
             }
@@ -297,6 +326,9 @@ public class ResponseLogin {
                 this.state = state;
             }
 
+            public String getGender() {
+                return gander;
+            }
         }
     }
 }

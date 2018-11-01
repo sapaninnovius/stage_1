@@ -1,9 +1,11 @@
 package com.stage1.Activities;
 
 
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -17,6 +19,8 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,28 +34,50 @@ import android.support.v7.widget.SearchView;
 import com.stage1.Fragments.GalaryFragment;
 import com.stage1.Fragments.HomeFragment;
 import com.stage1.Fragments.InboxFragment;
+import com.stage1.Fragments.MediaFragment;
+import com.stage1.Models.ResponseSearch;
+import com.stage1.Network.ApiClient;
+import com.stage1.Network.ApiInterface;
 import com.stage1.R;
 import com.stage1.Utils.PrefManager;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener, Animation.AnimationListener, View.OnClickListener {
-
+    HashMap<String, Boolean> filter;
     private DrawerLayout mDrawerLayout;
     HomeFragment homeFragment;
-   /* ImageView img_search,img_search_clear;
-    EditText et_search;*/
+    /* ImageView img_search,img_search_clear;
+     EditText et_search;*/
     Toolbar toolbar;
     private Animation animSideDown, animSideUp;
 
     String title;
     private FragmentCommunicator fragmentCommunicator;
     private View notification_layout;
+    private ProgressDialog pDialog;
+    private List<ResponseSearch.Datum> searchData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        pDialog = new ProgressDialog(this);
+        // Set progressbar title
+//        pDialog.setTitle("Android Video Streaming Tutorial");
+        // Set progressbar message
+//        pDialog.setMessage("Buffering...");
+        pDialog.setIndeterminate(false);
+        pDialog.setCancelable(false);
+//        loadData();
         toolbar = findViewById(R.id.my_toolbar);
         animSideDown = AnimationUtils.loadAnimation(getApplicationContext(),
                 R.anim.slide_down);
@@ -59,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 R.anim.slide_up);
         animSideDown.setAnimationListener(this);
         animSideUp.setAnimationListener(this);
-        notification_layout =findViewById(R.id.layout_notification);
+        notification_layout = findViewById(R.id.layout_notification);
         CircleImageView img_yes = notification_layout.findViewById(R.id.img_yes);
         CircleImageView img_no = notification_layout.findViewById(R.id.img_no);
         img_yes.setOnClickListener(this);
@@ -75,29 +101,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                        FragmentTransaction fragmentTransaction;
+                FragmentTransaction fragmentTransaction;
                 switch (menuItem.getItemId()) {
                     case R.id.mnu_contact:
-                        notification_layout.setVisibility(View.VISIBLE);
-                        notification_layout.startAnimation(animSideDown);
+//                        notification_layout.setVisibility(View.VISIBLE);
+//                        notification_layout.startAnimation(animSideDown);
                         return true;
                     case R.id.mnu_gallery:
+                        /*fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                        fragmentTransaction.replace(R.id.main_container, new GalaryFragment(), "gallery");
+                        fragmentTransaction.addToBackStack("gallery");
+                        fragmentTransaction.commit();*/
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container,new GalaryFragment(),"gallery");
+                        fragmentTransaction.replace(R.id.main_container, new MediaFragment(), "gallery");
                         fragmentTransaction.addToBackStack("gallery");
                         fragmentTransaction.commit();
                         return true;
                     case R.id.mnu_home:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container,new HomeFragment(),"home");
+                        fragmentTransaction.replace(R.id.main_container, homeFragment, "home");
                         fragmentTransaction.addToBackStack("home");
                         fragmentTransaction.commit();
+//                        fragmentCommunicator.loadData(searchData);
                         return true;
                     case R.id.mnu_message:
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.main_container,new InboxFragment(),"inbox");
-                      fragmentTransaction.addToBackStack("inbox");
-                      fragmentTransaction.commit();
+                        fragmentTransaction.replace(R.id.main_container, new InboxFragment(), "inbox");
+                        fragmentTransaction.addToBackStack("inbox");
+                        fragmentTransaction.commit();
                         return true;
                     default:
                         return false;
@@ -120,8 +151,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         // close drawer when item is tapped
                         mDrawerLayout.closeDrawers();
 
-                        switch (menuItem.getItemId())
-                        {
+                        switch (menuItem.getItemId()) {
                             case R.id.mnu_changePassword:
                                 showMyDialog();
                                 break;
@@ -130,6 +160,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                                 break;
                             case R.id.mnu_notification:
                                 changeToNotification();
+                                break;
+                            case R.id.mnu_profile:
+//                                mDrawerLayout.closeDrawers();
+                                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+                                break;
+
+                            case R.id.mnu_club:
+                                startActivity(new Intent(MainActivity.this, ClubListActivity.class));
                                 break;
                         }
                         // Add code here to update the UI based on the item selected
@@ -142,24 +180,26 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         img_btn_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mDrawerLayout.closeDrawers();
-                startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+               /* mDrawerLayout.closeDrawers();
+                startActivity(new Intent(MainActivity.this, ProfileActivity.class));*/
             }
         });
-        homeFragment = new HomeFragment();
+        if (homeFragment == null)
+            homeFragment = new HomeFragment();
         FragmentTransaction fragmentTransaction;
         fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_container,homeFragment);
+        fragmentTransaction.add(R.id.main_container, homeFragment);
         fragmentTransaction.commit();
     }
 
+
     private void changeToNotification() {
-        startActivity(new Intent(this,NotificationActivity.class));
+        startActivity(new Intent(this, NotificationActivity.class));
     }
 
     private void showauthactivity() {
         clearData();
-        startActivity(new Intent(this,AuthActivity.class));
+        startActivity(new Intent(this, AuthActivity.class));
         finish();
     }
 
@@ -199,10 +239,10 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         /*ImageView closeButton = (ImageView)searchView.findViewById(*//*R.id.search_close_btn*//*searchView.getContext().getResources()
                 .getIdentifier("android:id/search_close_btn", null, null));*/
         /*closeButton.setOnClickListener(this);*/
-        MenuItemCompat.setOnActionExpandListener( menu.findItem(R.id.search), new MenuItemCompat.OnActionExpandListener() {
+        MenuItemCompat.setOnActionExpandListener(menu.findItem(R.id.search), new MenuItemCompat.OnActionExpandListener() {
             @Override
             public boolean onMenuItemActionExpand(MenuItem menuItem) {
-                flag=false;
+                flag = false;
                 searchView.setIconified(false);
                 boolean i = searchView.isIconified();
 //               fragmentCommunicator.passData(true);
@@ -220,11 +260,14 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
 
     }
+
     public void passVal(FragmentCommunicator fragmentCommunicator) {
         this.fragmentCommunicator = fragmentCommunicator;
 
     }
+
     SearchView searchView;
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -243,34 +286,34 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        fragmentCommunicator.searchQuery(query);
+
+        fragmentCommunicator.searchQuery(query, searchData);
         return false;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        if (newText.length()==0)
-        {
+        if (newText.length() == 0) {
             fragmentCommunicator.passData(false);
-        }else
-        {
+        } else {
             fragmentCommunicator.passData(true);
         }
-        fragmentCommunicator.searchQuery(newText);
+        fragmentCommunicator.searchQuery(newText, searchData);
         return false;
     }
-    boolean flag= false;
+
+    boolean flag = false;
+
     @Override
     public boolean onClose() {
         fragmentCommunicator.passData(false);
-            if (!searchView.isIconified()&&!flag)
-            {
-                flag=true;
+        if (!searchView.isIconified() && !flag) {
+            flag = true;
 //                searchView.setIconified(true);
 //                onBackPressed();
 //                searchView.onActionViewCollapsed();
-                return true;
-            }
+            return true;
+        }
 //        searchView.onActionViewCollapsed();
         return true;
     }
@@ -328,6 +371,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 
         public void passData(boolean name);
 
-        public void searchQuery(String searchquery);
+        public void searchQuery(String searchquery, List<ResponseSearch.Datum> searchData);
+
+        public void loadData(List<ResponseSearch.Datum> searchData);
     }
 }

@@ -16,6 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/_40sdp">
         <CheckBox
+            android:id="@+id/cbox_bartender"
             android:checked="true"
             android:textSize="@dimen/_12ssp"
             android:buttonTint="@android:color/white"
@@ -25,6 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <CheckBox
+            android:id="@+id/cbox_waitress"
             android:checked="true"
             android:textSize="@dimen/_12ssp"
             android:buttonTint="@android:color/white"
@@ -34,15 +36,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <CheckBox
+            android:id="@+id/cbox_dancer"
             android:checked="true"
             android:textSize="@dimen/_12ssp"
             android:buttonTint="@android:color/white"
             android:textColor="@android:color/white"
             android:layout_weight="25"
-            android:text="Dancer"
+            android:text="Entertainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <CheckBox
+            android:id="@+id/cbox_bar"
             android:checked="true"
             android:textSize="@dimen/_12ssp"
             android:buttonTint="@android:color/white"

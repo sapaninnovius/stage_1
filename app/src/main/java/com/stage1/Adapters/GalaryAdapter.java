@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -18,11 +19,13 @@ import java.util.List;
 public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHolder> {
 
     private final List<GetAllMediaDetail.Datum> img_list;
+    private final int x;
     OnItemClickListener onItemClickListener;
 
-    public GalaryAdapter(List<GetAllMediaDetail.Datum> img_list, OnItemClickListener onItemClickListener) {
-        this.img_list=img_list;
-        this.onItemClickListener =onItemClickListener;
+    public GalaryAdapter(List<GetAllMediaDetail.Datum> img_list, OnItemClickListener onItemClickListener,int x) {
+        this.img_list = img_list;
+        this.onItemClickListener = onItemClickListener;
+        this.x=x;
     }
 
     @NonNull
@@ -34,20 +37,50 @@ public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
-        Glide.with(myViewHolder.img_gallery.getContext()).load(new PrefManager(myViewHolder.img_gallery.getContext()).getpath()+img_list.get(i).getFilePath()).into(myViewHolder.img_gallery);
+//        if (img_list.get(i).getFileType() == 2) {
+////            myViewHolder.shade_video.setVisibility(View.VISIBLE);
+//        }
+        if (i==0)
+        {
+            myViewHolder.shade_video.setVisibility(View.VISIBLE);
+            myViewHolder.img_gallery.setVisibility(View.GONE);
+            myViewHolder.ibutton_remove_gallery.setVisibility(View.GONE);
+        }else {
+            Glide.with(myViewHolder.img_gallery.getContext()).load(new PrefManager(myViewHolder.img_gallery.getContext()).getpath() + img_list.get(i-1).getFilePath()).into(myViewHolder.img_gallery);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return img_list.size();
+        if (img_list != null)
+        {
+            if (img_list.size()>0)
+            {
+                return img_list.size()+1;
+            }
+            else
+                return 1;
+        }
+        else
+            return 0;
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView img_gallery;
+        ImageButton ibutton_remove_gallery;
+        View shade_video;
+
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.setOnClickListener(this);
-            img_gallery=itemView.findViewById(R.id.img_gallery);
+//            itemView.setOnClickListener(this);
+            img_gallery = itemView.findViewById(R.id.img_gallery);
+            img_gallery.setOnClickListener(this);
+            shade_video = itemView.findViewById(R.id.shade_video);
+            shade_video.setOnClickListener(this);
+            ibutton_remove_gallery = itemView.findViewById(R.id.ibutton_remove_gallery);
+            ibutton_remove_gallery.setOnClickListener(this);
+            if (x==1)
+                ibutton_remove_gallery.setVisibility(View.GONE);
         }
 
         @Override
@@ -56,11 +89,23 @@ public class GalaryAdapter extends RecyclerView.Adapter<GalaryAdapter.MyViewHold
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             byte[] b = baos.toByteArray();*/
-            onItemClickListener.onItemClick(getLayoutPosition(),v);
+            switch (v.getId()) {
+                case R.id.shade_video:onItemClickListener.onNewItem();break;
+                case R.id.img_gallery:
+                    onItemClickListener.onItemClick(getLayoutPosition(), v);
+                    break;
+                case R.id.ibutton_remove_gallery:
+                    onItemClickListener.onItemRemove(getLayoutPosition());
+                    break;
+            }
+
 //            int image = img_list.get(getLayoutPosition());
         }
     }
+
     public interface OnItemClickListener {
-        void onItemClick(int item,View v);
+        void onItemClick(int item, View v);
+        void onItemRemove(int item);
+        void onNewItem();
     }
 }

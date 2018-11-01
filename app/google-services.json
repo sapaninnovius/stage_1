@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1080805371383",
+    "firebase_url": "https://stage1-f2236.firebaseio.com",
+    "project_id": "stage1-f2236",
+    "storage_bucket": "stage1-f2236.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080805371383:android:ee3ef62f82eb127f",
+        "android_client_info": {
+          "package_name": "com.stage1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1080805371383-qp2072h7hiolbg2ro729mol7g8ffe3d2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDAcaQ1Tcru8AUo-iRMHqIJz7cKrIcHR0o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
