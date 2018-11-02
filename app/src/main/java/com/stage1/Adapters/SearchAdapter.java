@@ -112,6 +112,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyViewHold
                     jsonObject.addProperty("name",barListFiltered.get(getLayoutPosition()).getName().toString());
                     jsonObject.addProperty("roleid",barListFiltered.get(getLayoutPosition()).getRoleId().toString());
                     jsonObject.addProperty("address",barListFiltered.get(getLayoutPosition()).getAddress().toString());
+                    jsonObject.addProperty("pic",barListFiltered.get(getLayoutPosition()).getProfilePic().toString());
                     /*
                     String id =
                             + ":" + barListFiltered.get(getLayoutPosition()).getName()

@@ -61,6 +61,7 @@ public class InboxAdapter extends RecyclerView.Adapter<InboxAdapter.MyViewHolder
             intent.putExtra("receiver_id", inboxModelList.get(getLayoutPosition()).getId());
             intent.putExtra("receiver_name", inboxModelList.get(getLayoutPosition()).getName());
             intent.putExtra("receiver_img", inboxModelList.get(getLayoutPosition()).getImg());
+            intent.putExtra("chatNode",inboxModelList.get(getLayoutPosition()).getNode());
             v.getContext().startActivity(intent);
         }
     }

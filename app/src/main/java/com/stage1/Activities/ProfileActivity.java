@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Image;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -37,8 +38,10 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -48,6 +51,7 @@ import com.stage1.Network.ApiClient;
 import com.stage1.Network.ApiInterface;
 import com.stage1.R;
 import com.stage1.ResponseRole;
+import com.stage1.Utils.Chat_Constant;
 import com.stage1.Utils.PrefManager;
 import com.stage1.Utils.User_Constant;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -57,6 +61,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -266,11 +271,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         }
         if (role_pref.getString(user_pref.getString(User_Constant.role_id, ""), "").toLowerCase().equals("user")) {
             hideBar();
-        }
-        else
-        {
-            if (user_pref.getString(User_Constant.bar_id,"").equals("0"))
-            {
+        } else {
+            if (user_pref.getString(User_Constant.bar_id, "").equals("0")) {
                 hideBar();
             }
         }
@@ -281,7 +283,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ((TextView) profile_view.findViewById(R.id.txt_phone_number_home)).setText(user_pref.getString(User_Constant.contact_number, ""));
         ((TextView) profile_view.findViewById(R.id.txt_address)).setText(user_pref.getString(User_Constant.address, ""));
         ((TextView) profile_view.findViewById(R.id.txt_role)).setText(role_pref.getString(user_pref.getString(User_Constant.role_id, ""), ""));
-//        ((TextView) profile_view.findViewById(R.id.txt_bar)).setText(user_pref.getString(User_Constant.bar_id, ""));
+        ((TextView) profile_view.findViewById(R.id.txt_bar)).setText(user_pref.getString(User_Constant.bar_id, ""));
         ((TextView) profile_view.findViewById(R.id.txt_gender)).setText(user_pref.getString(User_Constant.gander, ""));
         //edit
         ((EditText) profile_edit.findViewById(R.id.et_email)).setText(user_pref.getString(User_Constant.email, ""));
@@ -290,7 +292,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ((EditText) profile_edit.findViewById(R.id.et_address)).setText(user_pref.getString(User_Constant.address, ""));
         ((EditText) profile_edit.findViewById(R.id.et_gender)).setText(user_pref.getString(User_Constant.gander, ""));
         ((EditText) profile_edit.findViewById(R.id.et_role)).setText(role_pref.getString(user_pref.getString(User_Constant.role_id, ""), ""));
-//        ((EditText) profile_edit.findViewById(R.id.et_bar)).setText(user_pref.getString(User_Constant.bar_id, ""));
+        ((EditText) profile_edit.findViewById(R.id.et_bar)).setText(user_pref.getString(User_Constant.bar_id, ""));
         /*Map<String, ?> allEntries = role_pref.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
             Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
@@ -300,15 +302,13 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
     private void setBar(SharedPreferences user_pref) {
         SharedPreferences role_pref = (new PrefManager(ProfileActivity.this)).getBar_Pref();
         JsonParser parser = new JsonParser();
-        JsonArray json = (JsonArray) parser.parse(role_pref.getString("bar",""));
-        for (JsonElement row:json)
-        {
+        JsonArray json = (JsonArray) parser.parse(role_pref.getString("bar", ""));
+        for (JsonElement row : json) {
             JsonObject jsonObject = (JsonObject) parser.parse(row.toString());
-            String bar_id= jsonObject.get("bar_id").toString().replace("\"","");
-            if (user_pref.getString(User_Constant.bar_id, "").equals(bar_id))
-            {
-                ((EditText) profile_edit.findViewById(R.id.et_bar)).setText(jsonObject.get("name").toString().replace("\"",""));
-                ((TextView) profile_view.findViewById(R.id.txt_bar)).setText(jsonObject.get("name").toString().replace("\"",""));
+            String bar_id = jsonObject.get("bar_id").toString().replace("\"", "");
+            if (user_pref.getString(User_Constant.bar_id, "").equals(bar_id)) {
+                ((EditText) profile_edit.findViewById(R.id.et_bar)).setText(jsonObject.get("name").toString().replace("\"", ""));
+                ((TextView) profile_view.findViewById(R.id.txt_bar)).setText(jsonObject.get("name").toString().replace("\"", ""));
             }
         }
 
@@ -321,7 +321,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         ((TextView) profile_view.findViewById(R.id.txt_bar)).setVisibility(View.GONE);
         ((EditText) profile_edit.findViewById(R.id.et_bar)).setVisibility(View.GONE);
         ((ImageView) profile_edit.findViewById(R.id.img_edit_bar)).setVisibility(View.GONE);
-        ((ConstraintLayout)profile_view.findViewById(R.id.bar_constraint)).setVisibility(View.GONE);
+        ((ConstraintLayout) profile_view.findViewById(R.id.bar_constraint)).setVisibility(View.GONE);
     }
 
     /* @Override
@@ -348,7 +348,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             public boolean onMenuItemClick(MenuItem item) {
                 img_edit.setVisible(false);
                 img_cancel.setVisible(true);
-                Toast.makeText(ProfileActivity.this, "edit", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProfileActivity.this, "edit", Toast.LENGTH_SHORT).show();
                 ((View) findViewById(R.id.profile_edit)).setVisibility(View.VISIBLE);
                 ((View) findViewById(R.id.profile_show)).setVisibility(View.INVISIBLE);
                 ((EditText) profile_edit.findViewById(R.id.et_bar)).setEnabled(false);
@@ -364,7 +364,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 img_edit.setVisible(true);
                 img_cancel.setVisible(false);
                 img_pp_edit.setVisibility(View.INVISIBLE);
-                Toast.makeText(ProfileActivity.this, "cancel", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProfileActivity.this, "cancel", Toast.LENGTH_SHORT).show();
                 ((View) findViewById(R.id.profile_edit)).setVisibility(View.INVISIBLE);
                 ((View) findViewById(R.id.profile_show)).setVisibility(View.VISIBLE);
                 return false;
@@ -391,7 +391,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                 img_edit.setVisible(true);
                 img_cancel.setVisible(false);
                 img_pp_edit.setVisibility(View.INVISIBLE);
-                Toast.makeText(ProfileActivity.this, "cancel", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ProfileActivity.this, "cancel", Toast.LENGTH_SHORT).show();
                 ((View) findViewById(R.id.profile_edit)).setVisibility(View.INVISIBLE);
                 ((View) findViewById(R.id.profile_show)).setVisibility(View.VISIBLE);
                 validate();
@@ -511,6 +511,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
                     new PrefManager(ProfileActivity.this).updateUser(response.body().getData());
                     setdata();
                     updateFirebase();
+
                 }
                 pDialog.dismiss();
             }
@@ -522,9 +523,59 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    private void updateFirebase() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("MESSAGES");
+    HashMap<String, DataSnapshot> pathList;
+    HashMap<String, HashMap> parentList;
 
+    private void updateFirebase() {
+        if (pathList != null)
+            pathList.clear();
+        if (parentList != null)
+            parentList.clear();
+        if (parentList == null)
+            parentList = new HashMap<String, HashMap>();
+        final SharedPreferences user_pref = new PrefManager(this).getUser_pref();
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("MESSAGES");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot parent : dataSnapshot.getChildren()) {
+                    if (parent.getKey().toString().contains(user_pref.getString(User_Constant.id, User_Constant.id))) {
+                        pathList = new HashMap<String, DataSnapshot>();
+                        Log.d("profile", "key==>" + parent.getKey().toString());
+                        for (DataSnapshot child : parent.getChildren()) {
+                            Log.d("profile", "value==>" + child.getKey().toString());
+                            pathList.put(child.getKey(), child);
+                        }
+                        parentList.put(parent.getKey(), pathList);
+                    }
+                }
+
+                Log.d("profile", "parentlist" + parentList.keySet().toString());
+                for (String key : parentList.keySet()) {
+                    HashMap<String, DataSnapshot> dataSnapshotHashMap = parentList.get(key);
+                    Log.d("profile", "childlist" + dataSnapshotHashMap.keySet().toString());
+                    for (String key2 : dataSnapshotHashMap.keySet()) {
+                        DataSnapshot dataSnapshot1 = dataSnapshotHashMap.get(key2);
+                        if (dataSnapshot1.child(Chat_Constant.sender_id).getValue().toString().equals(user_pref.getString(User_Constant.id, ""))) {
+                            Log.d("profile", "path:" + key + "->" + key2 + "->" + "sender");
+                            databaseReference.child(key).child(key2).child(Chat_Constant.sender_img).setValue(user_pref.getString(User_Constant.profile_pic, ""));
+                            databaseReference.child(key).child(key2).child(Chat_Constant.sender_name).setValue(user_pref.getString(User_Constant.name, ""));
+                        } else {
+                            Log.d("profile", "path:" + key + "->" + key2 + "->" + "receiver");
+                            databaseReference.child(key).child(key2).child(Chat_Constant.receiver_img).setValue(user_pref.getString(User_Constant.profile_pic, ""));
+                            databaseReference.child(key).child(key2).child(Chat_Constant.receiver_name).setValue(user_pref.getString(User_Constant.name, ""));
+                        }
+                    }
+//                        Log.d("profile","child"+parentList.get(key));
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -533,7 +584,7 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
             img_edit.setVisible(true);
             img_cancel.setVisible(false);
             img_pp_edit.setVisibility(View.INVISIBLE);
-            Toast.makeText(ProfileActivity.this, "cancel", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(ProfileActivity.this, "cancel", Toast.LENGTH_SHORT).show();
             ((View) findViewById(R.id.profile_edit)).setVisibility(View.INVISIBLE);
             ((View) findViewById(R.id.profile_show)).setVisibility(View.VISIBLE);
         } else {

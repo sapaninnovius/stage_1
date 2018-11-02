@@ -26,6 +26,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.VideoView;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.stage1.Adapters.GalaryAdapter;
@@ -55,6 +56,7 @@ public class SearchDetailActivity extends AppCompatActivity {
     JsonParser jsonParser;
     JsonObject user_object;
     TextView username, address, role;
+    ImageView img_gallery_background_search_detail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +68,7 @@ public class SearchDetailActivity extends AppCompatActivity {
         username = findViewById(R.id.txt_uname_search_detail);
         role = findViewById(R.id.txt_post_search_detail);
         address = findViewById(R.id.txt_address_search_detail);
+        img_gallery_background_search_detail = findViewById(R.id.img_gallery_background_search_detail);
         setData();
         galary_list = findViewById(R.id.rv_gallery_search_detail);
         pDialog = new ProgressDialog(this);
@@ -81,11 +84,18 @@ public class SearchDetailActivity extends AppCompatActivity {
         galary_list.addItemDecoration(new ItemDecorationAlbumColumns(
                 getResources().getDimensionPixelSize(R.dimen._3sdp),
                 3));
+        ((ImageView)findViewById(R.id.img_msg)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openChat();
+            }
+        });
     }
 
     private void setData() {
         username.setText(user_object.get("name").toString().replace("\"",""));
         address.setText(user_object.get("address").toString().replace("\"",""));
+        Glide.with(this).load(new PrefManager(this).getpath()+user_object.get("pic").toString().replace("\"","")).into(img_gallery_background_search_detail);
         SharedPreferences role_pref = new PrefManager(this).getRole_pref();
         Map<String, ?> allEntries = role_pref.getAll();
         for (Map.Entry<String, ?> entry : allEntries.entrySet()) {
@@ -93,6 +103,16 @@ public class SearchDetailActivity extends AppCompatActivity {
                 role.setText(entry.getValue().toString());
             Log.d("map values", entry.getKey() + ": " + entry.getValue().toString());
         }
+    }
+
+    void openChat()
+    {
+        Intent intent = new Intent(this, ChatActivity.class);
+        intent.putExtra("receiver_id", user_object.get("id").toString().replace("\"",""));
+        intent.putExtra("receiver_name", user_object.get("name").toString().replace("\"",""));
+        intent.putExtra("receiver_img", user_object.get("pic").toString().replace("\"",""));
+        intent.putExtra("chatNode","blank");
+        startActivity(intent);
     }
 
     private void getImageList() {

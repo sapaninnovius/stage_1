@@ -79,35 +79,42 @@ public class InboxFragment extends Fragment {
                 inboxModelList.clear();
 //                rowData=rowData;
                 for (DataSnapshot row : rowData) {
-                    InboxModel inboxModel = new InboxModel();
+                    InboxModel inboxModel = null;
+                    
                     String msg = "";
                     String username = "";
                     String id = "";
                     String img = "";
                     String time = "";
                     if (row.getKey().toString().contains(user_pref.getString(User_Constant.id, ""))) {
-
+                        inboxModel = new InboxModel();
                         for (DataSnapshot column : row.getChildren()) {
+                            String receiver_id = column.child(Chat_Constant.receiver_id).getValue().toString();
+                            String me = user_pref.getString(User_Constant.id,"");
                             if (!column.child(Chat_Constant.receiver_id).getValue().toString().equals(user_pref.getString(User_Constant.id, ""))) {
-                                msg = column.child(Chat_Constant.message).getValue().toString();
-                                id = column.child(Chat_Constant.receiver_id).toString();
+                                
+                                id = column.child(Chat_Constant.receiver_id).getValue().toString();
                                 username = column.child(Chat_Constant.receiver_name).getValue().toString();
                                 img = column.child(Chat_Constant.receiver_img).getValue().toString();
-                                time = column.child(Chat_Constant.time).getValue().toString();
+
                             } else {
-                                msg = column.child(Chat_Constant.message).getValue().toString();
-                                id = column.child(Chat_Constant.receiver_id).toString();
+                                id = column.child(Chat_Constant.sender_id).getValue().toString();
                                 username = column.child(Chat_Constant.sender_name).getValue().toString();
                                 img = column.child(Chat_Constant.sender_img).getValue().toString();
-                                time = column.child(Chat_Constant.time).getValue().toString();
+//                                msg = column.child(Chat_Constant.message).getValue().toString();
+//                                time = column.child(Chat_Constant.time).getValue().toString();
                             }
+                            msg = column.child(Chat_Constant.message).getValue().toString();
+                            time = column.child(Chat_Constant.time).getValue().toString();
                             Log.d("inbox", "keys" + column.getKey());
+                            inboxModel.setName(username);
+                            inboxModel.setImg(img);
+                            inboxModel.setMessage(msg);
+                            inboxModel.setTime(time);
+                            inboxModel.setId(id);
+                            inboxModel.setNode(row.getKey());
                         }
-                        inboxModel.setName(username);
-                        inboxModel.setImg(img);
-                        inboxModel.setMessage(msg);
-                        inboxModel.setTime(time);
-                        inboxModel.setId(id);
+                       
                         /*if (row.getKey().toString().contains(user_pref.getString(User_Constant.id,"")+"-"))
                         {
                             inboxModel.setId(user_pref.getString(User_Constant.id,""));
@@ -118,6 +125,7 @@ public class InboxFragment extends Fragment {
                         }*/
                         Log.d("inbox", "{ message:" + msg + ",username:" + username + ",img:" + img + ",time:" + time);
                     }
+                    if (inboxModel!=null)
                     inboxModelList.add(inboxModel);
                 }
                 setData();

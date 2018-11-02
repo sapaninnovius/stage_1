@@ -15,6 +15,7 @@ public class InboxModel {
     String time;
     String message;
     String img;
+    String node;
 
     public String getName() {
         return name;
@@ -46,5 +47,13 @@ public class InboxModel {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getNode() {
+        return node;
+    }
+
+    public void setNode(String node) {
+        this.node = node;
     }
 }

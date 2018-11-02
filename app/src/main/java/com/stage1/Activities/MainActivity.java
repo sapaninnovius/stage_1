@@ -58,18 +58,45 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
      EditText et_search;*/
     Toolbar toolbar;
     private Animation animSideDown, animSideUp;
-
     String title;
     private FragmentCommunicator fragmentCommunicator;
     private View notification_layout;
     private ProgressDialog pDialog;
     private List<ResponseSearch.Datum> searchData;
+    int indicator;
+     BottomNavigationView bottomNavigation;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       /* switch (indicator)
+        {
+            case 0:bottomNavigation.setSelectedItemId(R.id.mnu_home);break;
+            case 1:bottomNavigation.setSelectedItemId(R.id.mnu_gallery);break;
+            case 2:bottomNavigation.setSelectedItemId(R.id.mnu_message);break;
+            case 3:bottomNavigation.setSelectedItemId(R.id.mnu_contact);break;
+        }*/
+//        if (getIntent().getBooleanExtra("notification",false))
+//        {
+//            /*if (homeFragment == null)
+//                homeFragment = new InboxFragment();*/
+//            FragmentTransaction fragmentTransaction;
+//            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.add(R.id.main_container,new InboxFragment());
+//            fragmentTransaction.commit();
+//        }else
+        {
+//            bottomNavigation.setSelectedItemId(R.id.mnu_home);
+
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        indicator =0;
         pDialog = new ProgressDialog(this);
         // Set progressbar title
 //        pDialog.setTitle("Android Video Streaming Tutorial");
@@ -96,7 +123,8 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         img_search.setOnClickListener(this);
         img_search_clear.setOnClickListener(this);*/
         createDialog();
-        final BottomNavigationView bottomNavigation = findViewById(R.id.bottom_menu);
+
+        bottomNavigation = findViewById(R.id.bottom_menu);
         bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
@@ -104,10 +132,12 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 FragmentTransaction fragmentTransaction;
                 switch (menuItem.getItemId()) {
                     case R.id.mnu_contact:
+                        indicator=3;
 //                        notification_layout.setVisibility(View.VISIBLE);
 //                        notification_layout.startAnimation(animSideDown);
                         return true;
                     case R.id.mnu_gallery:
+                        indicator=1;
                         /*fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.main_container, new GalaryFragment(), "gallery");
                         fragmentTransaction.addToBackStack("gallery");
@@ -118,6 +148,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                         fragmentTransaction.commit();
                         return true;
                     case R.id.mnu_home:
+                        indicator=0;
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.main_container, homeFragment, "home");
                         fragmentTransaction.addToBackStack("home");
@@ -125,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
 //                        fragmentCommunicator.loadData(searchData);
                         return true;
                     case R.id.mnu_message:
+                        indicator=2;
                         fragmentTransaction = getSupportFragmentManager().beginTransaction();
                         fragmentTransaction.replace(R.id.main_container, new InboxFragment(), "inbox");
                         fragmentTransaction.addToBackStack("inbox");
@@ -139,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_action_menu);
-
+        FragmentTransaction fragmentTransaction;
         mDrawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
@@ -169,6 +201,22 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                             case R.id.mnu_club:
                                 startActivity(new Intent(MainActivity.this, ClubListActivity.class));
                                 break;
+
+                            case R.id.mnu_message:
+                                FragmentTransaction fragmentTransaction;
+                                indicator=2;
+                                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.main_container, new InboxFragment(), "inbox");
+                                fragmentTransaction.addToBackStack("inbox");
+                                fragmentTransaction.commit();
+                                break;
+                            case R.id.mnu_gallery:
+                                indicator=1;
+                                fragmentTransaction = getSupportFragmentManager().beginTransaction();
+                                fragmentTransaction.replace(R.id.main_container, new InboxFragment(), "inbox");
+                                fragmentTransaction.addToBackStack("inbox");
+                                fragmentTransaction.commit();
+                                break;
                         }
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
@@ -184,12 +232,30 @@ public class MainActivity extends AppCompatActivity implements SearchView.OnQuer
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));*/
             }
         });
-        if (homeFragment == null)
-            homeFragment = new HomeFragment();
-        FragmentTransaction fragmentTransaction;
-        fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.add(R.id.main_container, homeFragment);
-        fragmentTransaction.commit();
+//        if (getIntent().getBooleanExtra("notification",false))
+//        {
+//            /*if (homeFragment == null)
+//                homeFragment = new InboxFragment();*/
+//            FragmentTransaction fragmentTransaction;
+//            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.add(R.id.main_container,new InboxFragment());
+//            fragmentTransaction.commit();
+//        }else
+//        {
+//            if (homeFragment == null)
+//                homeFragment = new HomeFragment();
+//            FragmentTransaction fragmentTransaction;
+//            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//            fragmentTransaction.add(R.id.main_container, homeFragment);
+//            fragmentTransaction.commit();
+//        }
+        {
+            if (homeFragment == null)
+                homeFragment = new HomeFragment();
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.add(R.id.main_container, homeFragment);
+            fragmentTransaction.commit();
+        }
     }
 
 
